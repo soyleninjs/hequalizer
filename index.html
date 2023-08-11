@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="assets/logo.svg">
+  <title>Set Height Elements</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/component-float-sidebar.css">
+  <link rel="stylesheet" href="css/item-card.css">
+  <link rel="stylesheet" href="css/main-menu.css">
+  <link rel="stylesheet" href="css/main-footer.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/content.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="main-wrapper">
+    
+    <header class="main-header container">
+      <div class="main-header-logo-wrapper">
+        <img class="main-header-logo" width="40" height="40" src="assets/logo.svg" alt="logo">
+        <h1 class="main-header-title">Hequalizer</h1>
+      </div>
+
+      <div class="main-header-icons-wrapper">
+        <a href="/" class="main-header-icon-wrapper">
+          <svg class="main-header-icon" width="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
+          </svg>
+        </a>
+        <a href="/" class="main-header-icon-wrapper">
+          <svg class="main-header-icon" width="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M4 10v4h2v-3h1v3h1v-4H4m5 0v5h2v-1h2v-4H9m3 1v2h-1v-2h1m2-1v4h2v-3h1v3h1v-3h1v3h1v-4h-6M3 9h18v6h-9v1H8v-1H3V9Z"/>
+          </svg>
+        </a>
+        <button class="main-header-icon-wrapper" data-button-theme-mode>
+          <svg class="main-header-icon main-header-icon-night" width="26" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M12 22c5.523 0 10-4.477 10-10c0-.463-.694-.54-.933-.143a6.5 6.5 0 1 1-8.924-8.924C12.54 2.693 12.463 2 12 2C6.477 2 2 6.477 2 12s4.477 10 10 10Z"/>
+          </svg>
+          <svg class="main-header-icon main-header-icon-day" width="26" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <path d="M120 40V16a8 8 0 0 1 16 0v24a8 8 0 0 1-16 0Zm8 24a64 64 0 1 0 64 64a64.07 64.07 0 0 0-64-64Zm-69.66 5.66a8 8 0 0 0 11.32-11.32l-16-16a8 8 0 0 0-11.32 11.32Zm0 116.68l-16 16a8 8 0 0 0 11.32 11.32l16-16a8 8 0 0 0-11.32-11.32ZM192 72a8 8 0 0 0 5.66-2.34l16-16a8 8 0 0 0-11.32-11.32l-16 16A8 8 0 0 0 192 72Zm5.66 114.34a8 8 0 0 0-11.32 11.32l16 16a8 8 0 0 0 11.32-11.32ZM48 128a8 8 0 0 0-8-8H16a8 8 0 0 0 0 16h24a8 8 0 0 0 8-8Zm80 80a8 8 0 0 0-8 8v24a8 8 0 0 0 16 0v-24a8 8 0 0 0-8-8Zm112-88h-24a8 8 0 0 0 0 16h24a8 8 0 0 0 0-16Z"/>
+          </svg>
+        </button>
+      </div>    
+    </header>
+    
+    <main class="main-content container">
+
+      <float-sidebar data-animation-duration="0.4">
+        <div class="float-sidebar-button-wrapper">
+          <div class="float-sidebar-button" data-sidebar-button-open>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 8h12M6 12h12M6 16h12"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="float-sidebar" data-sidebar>
+          <div class="float-sidebar-mask" data-sidebar-mask></div>
+
+          <div class="float-sidebar-container">
+            
+            <div class="float-sidebar-container-int">
+              
+              <div class="float-sidebar-icon-close-wrapper" data-sidebar-button-close>
+                <span class="float-sidebar-icon-close"></span>
+              </div>
+
+              <div class="float-sidebar-content">
+                <div class="float-sidebar-content-scrolleable">
+                  <div class="side-wrapper">
+                    <!-- <div class="side-title">Hequalizer</div> -->
+                    <div class="side-menu">
+
+                      <a class="side-menu-button" href="#" data-scrollspy-button="intro">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 17.75l-6.172 3.245l1.179-6.873l-5-4.867l6.9-1l3.086-6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/>
+                        </svg>
+                        Intro
+                      </a>
+
+                      <a class="side-menu-button" href="#" data-scrollspy-button="installation">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                          <path d="m10.05 10.607l-7.07 7.07a2 2 0 0 0 0 2.83v0a2 2 0 0 0 2.828 0l7.07-7.072m-2.828-2.828c-.844-2.153-.679-4.978 1.06-6.718c1.74-1.74 4.95-2.121 6.718-1.06l-3.04 3.04l-.283 3.111l3.111-.282l3.04-3.041c1.062 1.768.68 4.978-1.06 6.717c-1.74 1.74-4.564 1.905-6.717 1.061"/>
+                        </svg>
+                        Instalación
+                        <!-- <span class="notification-number updates">3</span> -->
+                      </a>
+
+                      <a class="side-menu-button" href="#" data-scrollspy-button="initialization">
+                        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                          <path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224c.231.114.454.243.668.386c.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63c.27.385.506.792.704 1.218c.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294c.016.257.016.515 0 .772c-.01.147.038.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.977 7.977 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.102-.302c-.067-.019-.177-.011-.3.071a5.909 5.909 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.29 1.106c-.168.646-.715 1.196-1.458 1.26a8.006 8.006 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.079-.158-.212-.224a5.738 5.738 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a8.12 8.12 0 0 1-.704-1.218c-.315-.675-.111-1.422.363-1.891l.815-.806c.05-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.038-.246-.088-.294l-.815-.806C.635 6.045.431 5.298.746 4.623a7.92 7.92 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.102.302c.067.019.177.011.3-.071c.214-.143.437-.272.668-.386c.133-.066.194-.158.211-.224l.29-1.106C6.009.645 6.556.095 7.299.03C7.53.01 7.764 0 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189c-.173.086-.34.183-.5.29c-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045c-.22.312-.412.644-.573.99c-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.081.08-.073.159-.059.19c.162.346.353.677.573.989c.02.03.085.076.195.046l1.102-.303c.56-.153 1.113-.008 1.53.27c.161.107.328.204.501.29c.447.222.85.629.997 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.036.137-.146l.289-1.105c.147-.561.549-.967.998-1.189c.173-.086.34-.183.5-.29c.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045c.22-.313.411-.644.573-.99c.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.081-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.102.303c-.56.153-1.113.008-1.53-.27a4.44 4.44 0 0 0-.501-.29c-.447-.222-.85-.629-.997-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0a3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z"/>
+                        </svg>
+                        Inicializar
+                      </a>
+
+                      <a class="side-menu-button" href="#" data-scrollspy-button="parameters">
+                        <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                          <path d="M54.8 119.49a35.06 35.06 0 0 1-5.75 8.51a35.06 35.06 0 0 1 5.75 8.51C60 147.24 60 159.83 60 172c0 25.94 1.84 32 20 32a12 12 0 0 1 0 24c-19.14 0-32.2-6.9-38.8-20.51C36 196.76 36 184.17 36 172c0-25.94-1.84-32-20-32a12 12 0 0 1 0-24c18.16 0 20-6.06 20-32c0-12.17 0-24.76 5.2-35.49C47.8 34.9 60.86 28 80 28a12 12 0 0 1 0 24c-18.16 0-20 6.06-20 32c0 12.17 0 24.76-5.2 35.49ZM240 116c-18.16 0-20-6.06-20-32c0-12.17 0-24.76-5.2-35.49C208.2 34.9 195.14 28 176 28a12 12 0 0 0 0 24c18.16 0 20 6.06 20 32c0 12.17 0 24.76 5.2 35.49A35.06 35.06 0 0 0 207 128a35.06 35.06 0 0 0-5.75 8.51C196 147.24 196 159.83 196 172c0 25.94-1.84 32-20 32a12 12 0 0 0 0 24c19.14 0 32.2-6.9 38.8-20.51c5.2-10.73 5.2-23.32 5.2-35.49c0-25.94 1.84-32 20-32a12 12 0 0 0 0-24Z"/>
+                        </svg>
+                        Parámetros
+                      </a>
+
+                      <a class="side-menu-button" href="#" data-scrollspy-button="methods">
+                        <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                          <path d="M82.33 222.19a12 12 0 0 1-16.5 4.09C64 225.16 20 198 20 128s44-97.16 45.83-98.28a12 12 0 0 1 12.41 20.53C76.71 51.21 44 72.31 44 128s32.85 76.88 34.25 77.75a12 12 0 0 1 4.08 16.44ZM190.17 29.72a12 12 0 1 0-12.42 20.53c1.4.87 34.25 21.94 34.25 77.75s-32.85 76.88-34.17 77.7a12 12 0 1 0 12.34 20.58C192 225.16 236 198 236 128s-44-97.16-45.83-98.28Z"/>
+                        </svg>
+                        Métodos
+                      </a>
+
+                      <a class="side-menu-button" href="#" data-scrollspy-button="events">
+                        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                          <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0a6.5 6.5 0 0 0-13 0Zm4.879-2.773l4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"/>
+                        </svg>
+                        Eventos
+                      </a>
+
+                    </div>
+                  </div>
+
+                  <div class="side-wrapper">
+                    <div class="side-title">Demos</div>
+                    <div class="side-menu">
+
+                      <a class="side-menu-button" href="#" data-scrollspy-button="demo-carousel">
+                        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                          <path d="M22 26H10a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2zM10 8v16h12V8zM4 24H0v-2h4V10H0V8h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2zm28 0h-4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h4v2h-4v12h4z"/>
+                        </svg>
+                        Carousel
+                      </a>
+
+                      <a class="side-menu-button" href="#" data-scrollspy-button="demo-grid-responsive">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                          <path d="M5 3h13a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3m0 1a2 2 0 0 0-2 2v3h5V4H5M3 19a2 2 0 0 0 2 2h3v-5H3v3m5-9H3v5h5v-5m10 11a2 2 0 0 0 2-2v-3h-5v5h3m2-11h-5v5h5v-5m0-4a2 2 0 0 0-2-2h-3v5h5V6M9 4v5h5V4H9m0 17h5v-5H9v5m5-11H9v5h5v-5Z"/>
+                        </svg>
+                        Grid
+                      </a>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+        </div>
+      </float-sidebar>
+      
+      <div class="layout">
+        <!-- Sidebar -->
+        <div class="layout-left-side">
+          <div class="sidebar">
+
+            <div class="side-wrapper">
+              <!-- <div class="side-title">Hequalizer</div> -->
+              <div class="side-menu">
+
+                <a class="side-menu-button" href="#" data-scrollspy-button="intro">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 17.75l-6.172 3.245l1.179-6.873l-5-4.867l6.9-1l3.086-6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/>
+                  </svg>
+                  Intro
+                </a>
+
+                <a class="side-menu-button" href="#" data-scrollspy-button="installation">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <path d="m10.05 10.607l-7.07 7.07a2 2 0 0 0 0 2.83v0a2 2 0 0 0 2.828 0l7.07-7.072m-2.828-2.828c-.844-2.153-.679-4.978 1.06-6.718c1.74-1.74 4.95-2.121 6.718-1.06l-3.04 3.04l-.283 3.111l3.111-.282l3.04-3.041c1.062 1.768.68 4.978-1.06 6.717c-1.74 1.74-4.564 1.905-6.717 1.061"/>
+                  </svg>
+                  Instalación
+                  <!-- <span class="notification-number updates">3</span> -->
+                </a>
+
+                <a class="side-menu-button" href="#" data-scrollspy-button="initialization">
+                  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224c.231.114.454.243.668.386c.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63c.27.385.506.792.704 1.218c.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294c.016.257.016.515 0 .772c-.01.147.038.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.977 7.977 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.102-.302c-.067-.019-.177-.011-.3.071a5.909 5.909 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.29 1.106c-.168.646-.715 1.196-1.458 1.26a8.006 8.006 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.079-.158-.212-.224a5.738 5.738 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a8.12 8.12 0 0 1-.704-1.218c-.315-.675-.111-1.422.363-1.891l.815-.806c.05-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.038-.246-.088-.294l-.815-.806C.635 6.045.431 5.298.746 4.623a7.92 7.92 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.102.302c.067.019.177.011.3-.071c.214-.143.437-.272.668-.386c.133-.066.194-.158.211-.224l.29-1.106C6.009.645 6.556.095 7.299.03C7.53.01 7.764 0 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189c-.173.086-.34.183-.5.29c-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045c-.22.312-.412.644-.573.99c-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.081.08-.073.159-.059.19c.162.346.353.677.573.989c.02.03.085.076.195.046l1.102-.303c.56-.153 1.113-.008 1.53.27c.161.107.328.204.501.29c.447.222.85.629.997 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.036.137-.146l.289-1.105c.147-.561.549-.967.998-1.189c.173-.086.34-.183.5-.29c.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045c.22-.313.411-.644.573-.99c.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.081-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.102.303c-.56.153-1.113.008-1.53-.27a4.44 4.44 0 0 0-.501-.29c-.447-.222-.85-.629-.997-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0a3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z"/>
+                  </svg>
+                  Inicializar
+                </a>
+
+                <a class="side-menu-button" href="#" data-scrollspy-button="parameters">
+                  <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <path d="M54.8 119.49a35.06 35.06 0 0 1-5.75 8.51a35.06 35.06 0 0 1 5.75 8.51C60 147.24 60 159.83 60 172c0 25.94 1.84 32 20 32a12 12 0 0 1 0 24c-19.14 0-32.2-6.9-38.8-20.51C36 196.76 36 184.17 36 172c0-25.94-1.84-32-20-32a12 12 0 0 1 0-24c18.16 0 20-6.06 20-32c0-12.17 0-24.76 5.2-35.49C47.8 34.9 60.86 28 80 28a12 12 0 0 1 0 24c-18.16 0-20 6.06-20 32c0 12.17 0 24.76-5.2 35.49ZM240 116c-18.16 0-20-6.06-20-32c0-12.17 0-24.76-5.2-35.49C208.2 34.9 195.14 28 176 28a12 12 0 0 0 0 24c18.16 0 20 6.06 20 32c0 12.17 0 24.76 5.2 35.49A35.06 35.06 0 0 0 207 128a35.06 35.06 0 0 0-5.75 8.51C196 147.24 196 159.83 196 172c0 25.94-1.84 32-20 32a12 12 0 0 0 0 24c19.14 0 32.2-6.9 38.8-20.51c5.2-10.73 5.2-23.32 5.2-35.49c0-25.94 1.84-32 20-32a12 12 0 0 0 0-24Z"/>
+                  </svg>
+                  Parámetros
+                </a>
+
+                <a class="side-menu-button" href="#" data-scrollspy-button="methods">
+                  <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <path d="M82.33 222.19a12 12 0 0 1-16.5 4.09C64 225.16 20 198 20 128s44-97.16 45.83-98.28a12 12 0 0 1 12.41 20.53C76.71 51.21 44 72.31 44 128s32.85 76.88 34.25 77.75a12 12 0 0 1 4.08 16.44ZM190.17 29.72a12 12 0 1 0-12.42 20.53c1.4.87 34.25 21.94 34.25 77.75s-32.85 76.88-34.17 77.7a12 12 0 1 0 12.34 20.58C192 225.16 236 198 236 128s-44-97.16-45.83-98.28Z"/>
+                  </svg>
+                  Métodos
+                </a>
+
+                <a class="side-menu-button" href="#" data-scrollspy-button="events">
+                  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0a6.5 6.5 0 0 0-13 0Zm4.879-2.773l4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"/>
+                  </svg>
+                  Eventos
+                </a>
+
+              </div>
+            </div>
+
+            <div class="side-wrapper">
+              <div class="side-title">Demos</div>
+              <div class="side-menu">
+
+                <a class="side-menu-button" href="#" data-scrollspy-button="demo-carousel">
+                  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <path d="M22 26H10a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2zM10 8v16h12V8zM4 24H0v-2h4V10H0V8h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2zm28 0h-4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h4v2h-4v12h4z"/>
+                  </svg>
+                  Carousel
+                </a>
+
+                <a class="side-menu-button" href="#" data-scrollspy-button="demo-grid-responsive">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                    <path d="M5 3h13a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3m0 1a2 2 0 0 0-2 2v3h5V4H5M3 19a2 2 0 0 0 2 2h3v-5H3v3m5-9H3v5h5v-5m10 11a2 2 0 0 0 2-2v-3h-5v5h3m2-11h-5v5h5v-5m0-4a2 2 0 0 0-2-2h-3v5h5V6M9 4v5h5V4H9m0 17h5v-5H9v5m5-11H9v5h5v-5Z"/>
+                  </svg>
+                  Grid
+                </a>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Cnotent -->
+        <div class="layout-center-side">
+
+          <div class="main-sections">
+            <!-- Info -->
+            <section class="section-container block-intro" data-scrollspy-section="intro">
+              <div class="section-header">
+                <h2 class="section-title">Hequalizer</h2>
+              </div>
+              <div class="section-content">
+                <p class="text">Script para calcular la altura máxima entre un conjunto de elementos.</p>
+                <br>
+                <p class="text">El objetivo de este script es comparar la altura de un conjunto de elementos/nodos en el DOM y obtener la altura que sea mayor, regresando ese valor en forma de variable CSS a cada uno de los elementos/nodos, con el fin de poder lograr una alineación horizontal perfecta (por ejemplo, muchos elementos en un slider, o un grid).</p>
+              </div>
+            </section>
+
+            <!-- Instalacion -->
+            <section class="section-container block-config" data-scrollspy-section="installation">
+              <div class="section-header">
+                <h2 class="section-title">Instalacion</h2>
+                <p class="text"><strong>Hequalizer</strong> está disponible en NPM con el nombre de <strong>hequalizer</strong>, se puede instalar con Yarn o NPM:</p>
+              </div>
+
+              <div class="section-content">
+                <pre>
+                  <code class="language-bash">
+                    yarn add hequalizer
+                  </code>
+                </pre>
+
+                <pre>
+                  <code class="language-js">
+                    npm i hequalizer
+                  </code>
+                </pre>
+
+                <p class="text">Solo se necesita hacer <strong>import</strong> del modulo y crear una instancia:</p>
+
+                <pre>
+                  <code class="language-js">
+                    import Hequalizer from "hequalizer";
+
+                    const hequalizer = new Hequalizer(...);
+                  </code>
+                </pre>
+              </div>
+            </section>
+
+            <!-- Inicializacion -->
+            <section class="section-container block-config" data-scrollspy-section="initialization">
+              <div class="section-header">
+                <h2 class="section-title">Inicializar Hequalizer</h2>
+                <p class="text">Configuración y propiedades predeterminadas para iniciar el plugin:</p>
+                <p class="text-small">No necesita una configuracion determinada en html, solo necesita capturar un array de elementos y pasarlo a la configuracion del plugin. El siguiente ejemplo son las configuraciones predeterminadas, si opta por no pasar ninguna configuracion adicional, solo puede pasar un objeto vacio y las opciones predeterminadas son las que se tomaran.</p>
+              </div>
+
+              <div class="section-content">
+                <pre>
+                  <code class="language-js">
+                    import Hequalizer from "hequalizer";
+
+                    const $elements = document.querySelectorAll(".titles");
+
+                    const hequalizer = new Hequalizer($elements, {
+                      cssVariable: '--height',
+                      columns: "all",
+                      initialIndex: 0,
+                      resizeObserver: true,
+                      classElementToOmit: '',
+                      on: {
+                        init: (data, instance) => {},
+                        afterResize: (data, instance) => {},
+                        afterChanges: (data, instance) => {},
+                        afterUpdate: (data, instance) => {},
+                        afterDestroy: (instance) => {},
+                      },
+                      responsive: {}
+                    });
+                  </code>
+                </pre>
+              </div>
+            </section>
+
+            <!-- Parametros -->
+            <section class="section-container block-params" data-scrollspy-section="parameters">
+              <div class="section-header">
+                <h2 class="section-title">Parámetros</h2>
+                <p class="text">Lista de todas las parámetros que se pueden configurar:</p>
+              </div>
+              <div class="section-content">
+                <pre>
+                  <code class="language-js">
+                    const hequalizer = new Hequalizer($elements, options);
+                  </code>
+                </pre>
+
+                <h3 class="section-small-title">Parámetros</h3>
+                <div class="table-wrapper">
+                  <div class="table">
+
+                    <div class="table-row table-row-header table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text">Nombre</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text">Tipo</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text">Descripción</span>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text propertie-color">$elements</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text type-color">Array</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Array de todos los elementos para revisar su altura.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const $elements = document.querySelectorAll(".titles");
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text propertie-color">options</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text type-color">Object</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Objeto con todas las opciones posibles. Cada que agregues una opción esta sobrescribe la default.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              cssVariable: "--height",
+                              ...
+                            };
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <h3 class="section-small-title">Opciones</h3>
+                <div class="table-wrapper">
+                  <div class="table">
+
+                    <div class="table-row table-row-header table-params-row">
+                      <div class="table-column">
+                        <span class="table-column-text">Nombre</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text">Tipo</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text">Default</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text">Descripción</span>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-params-row">
+                      <div class="table-column">
+                        <span class="table-column-text propertie-color">cssVariable</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text type-color">String</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">"--height"</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Este campo sirve para colocar la variable la cual tendrá el valor del cálculo de todas las alturas de entre todos los elementos del array. Esta variable se coloca en todos los elementos examinados.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              cssVariable: "--height",
+                            };
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-params-row">
+                      <div class="table-column">
+                        <span class="table-column-text propertie-color">columns</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text type-color">Number / String</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">"all"</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Con este campo se indica el numero de elementos (columnas) por fila en los que se realizarán los calculos, es decir, cada fila tendra cálculos independientes.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              columns: 3,
+                            };
+                          </code>
+                        </pre>
+
+                        <p class="table-column-text">
+                          Si contamos que los elementos a calcular se encuentran en una lista horizontal continua (una sola fila) se puede usar <span class="string-color">"all"</span> para que calcule todos los elementos independientemente de cuantos hay en total.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              columns: "all",
+                            };
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-params-row">
+                      <div class="table-column">
+                        <span class="table-column-text propertie-color">initialIndex</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text type-color">Number</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text number-color">0</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Este campo ayuda a que el script inicie en determinada posición del array, es decir, que inicie a partir de determinado index, así evitando configurar elementos que estén por detrás de esta posición inicial.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              initialIndex: 0,
+                            };
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-params-row">
+                      <div class="table-column">
+                        <span class="table-column-text propertie-color">resizeObserver</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text type-color">Boolean</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text boolean-color">true</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Con este campo se puede manipular si se actualizaran los cambios con el resize de la ventana. Si coloca el valor en <span class="boolean-color">false</span>, hara que ya no se actualizen los calculos al momento de hacer resize a la ventana.
+                        </p>
+                        
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              resizeObserver: true,
+                            };
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-params-row">
+                      <div class="table-column">
+                        <span class="table-column-text propertie-color">classElementToOmit</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text type-color">Number</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">" "</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Este parámetro recibe el nombre de la clase que comparten los elementos en el array, es decir, esta clase se usa para saltar aquel elemento que contenga esta clase, así se omite y no es contemplado para checar su altura.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              classElementToOmit: " ",
+                            };
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-params-row">
+                      <div class="table-column">
+                        <span class="table-column-text propertie-color">on</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text type-color">Object</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text boolean-color">{}</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Dentro de este objeto encontraremos los eventos que existen durante la vida de la instancia.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              on: {
+                                init: (data, instance) => {},
+                                afterResize: (data, instance) => {},
+                                afterChanges: (data, instance) => {},
+                                afterUpdate: (data, instance) => {},
+                                afterDestroy: (instance) => {},
+                              },
+                            };
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-params-row">
+                      <div class="table-column">
+                        <span class="table-column-text propertie-color">responsive</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text type-color">Object</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text boolean-color">{}</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Propiedad para configuraciones en responsive, pasamos el breakpoint como <span class="string-color">"key"</span> y le asignamos un objeto con las propiedades a cambiar. El funcionamiento del responsive es con base a "DesktopFirst".
+                          <br>
+                          Solo se pueden actualizar las siguientes propiedades:
+                          <br>
+                          - <span class="string-color">cssVariable</span>
+                          <br>
+                          - <span class="string-color">columns</span>
+                          <br>
+                          - <span class="string-color">initialIndex</span>
+                          <br>
+                          - <span class="string-color">resizeObserver</span>
+                          <br>
+                          - <span class="string-color">classElementToOmit</span>
+                          <br>
+                          - <span class="string-color">on</span>
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              responsive: {
+                                // window.innerWidth <= 834
+                                834: {
+                                  columns: 3,
+                                },
+                                // window.innerWidth <= 680
+                                680: {
+                                  columns: 2,
+                                },
+                                // window.innerWidth <= 500
+                                500: {
+                                  columns: 1,
+                                  resizeObserver: false,
+                                }
+                              }
+                            };
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Metodos -->
+            <section class="section-container block-methods" data-scrollspy-section="methods">
+              <div class="section-header">
+                <h2 class="section-title">Métodos</h2>
+                <p class="text">Lista de todos las métodos disponibles en la vida de la instancia:</p>
+              </div>
+              <div class="section-content">
+                <div class="table-wrapper">
+                  <div class="table table-methods">
+
+                    <div class="table-row table-row-header table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text">Nombre</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text">Parámentros</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text">Descripción</span>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text function-color">init</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">()</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Inicializa la configuración de manera manual. (este método puede usarse si anteriormente se usó el método <span class="function-color">destroy</span>())
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const hequalizer = new Hequalizer($elements, {})
+
+                            hequalizer.init()
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text function-color">destroy</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">
+                          (<span class="boolean-color">boolean</span>)
+                        </span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Remueve la configuración hecha por el plugin, remueve las variables css y cancela los eventos enlazados a los elementos. Si pasamos <span class="boolean-color">true</span> como parametro, la instancia se destruira del registro y ya no se tendra acceso a ella ni a sus métodos.
+                        </p>
+
+                        <p class="table-column-text">
+                          Valor predeterminado <span class="boolean-color">false</span>.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const hequalizer = new Hequalizer($elements, {})
+
+                            hequalizer.destroy(false)
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text function-color">update</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">()</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Actualiza de manera manual la configuración, esto hará que el evento de <span class="function-color">afterUpdate</span>() se ejecute.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const hequalizer = new Hequalizer($elements, {})
+
+                            hequalizer.update()
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Eventos -->
+            <section class="section-container block-events" data-scrollspy-section="events">
+              <div class="section-header">
+                <h2 class="section-title">Eventos</h2>
+                <p class="text">Eventos disponibles a los que podemos acceder mediante los parametros:</p>
+              </div>
+
+              <div class="section-content">
+                <pre>
+                  <code class="language-js">
+                    const hequalizer = new Hequalizer($elementsElements, {
+                      // ...
+                      on: {
+                        init: (data, instance) => {},
+                        afterResize: (data, instance) => {},
+                        afterChanges: (data, instance) => {},
+                        afterUpdate: (data, instance) => {},
+                        afterDestroy: (instance) => {},
+                      },
+                    });
+                  </code>
+                </pre>
+              </div>
+
+              <div class="section-content">
+                <div class="table-wrapper">
+                  <div class="table table-events">
+
+                    <div class="table-row table-row-header table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text">Nombre</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text">Parámentros</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text">Descripción</span>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text function-color">init</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">(data, instance)</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Evento lanzado cada vez que se inicia la instancia.
+                        </p>
+
+                        <p class="table-column-text">
+                          Los parámetros retornan los valores configurados y el objeto de la instancia.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              // ...
+                              on: {
+                                init: (data, instance) => {
+                                  console.log(data, instance);
+                                },
+                              };
+                            })
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text function-color">afterResize</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">(data, instance)</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Evento lanzado después de cada resize.
+                        </p>
+
+                        <p class="table-column-text">
+                          Los parámetros retornan los valores configurados y el objeto de la instancia.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              // ...
+                              on: {
+                                afterResize: (data, instance) => {
+                                  console.log(data, instance);
+                                },
+                              };
+                            })
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text function-color">afterChanges</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">(data, instance)</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Evento lanzado después de un cambio en el DOM sobre los elementos del array.
+                        </p>
+
+                        <p class="table-column-text">
+                          Los parámetros retornan los valores configurados y el objeto de la instancia.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              // ...
+                              on: {
+                                afterChanges: (data, instance) => {
+                                  console.log(data, instance);
+                                },
+                              };
+                            })
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text function-color">afterUpdate</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">(data, instance)</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Evento lanzado después de ejecutar el método <span class="function-color">update</span>() de la instancia.
+                        </p>
+
+                        <p class="table-column-text">
+                          Los parámetros retornan los valores configurados y el objeto de la instancia.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              // ...
+                              on: {
+                                afterUpdate: (data, instance) => {
+                                  console.log(data, instance);
+                                },
+                              };
+                            })
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div class="table-row table-3-columns-row">
+                      <div class="table-column">
+                        <span class="table-column-text function-color">afterDestroy</span>
+                      </div>
+                      <div class="table-column">
+                        <span class="table-column-text string-color">(instance)</span>
+                      </div>
+                      <div class="table-column">
+                        <p class="table-column-text">
+                          Evento lanzado después de ejecutar el método <span class="function-color">destroy</span>() de la instancia.
+                        </p>
+
+                        <p class="table-column-text">
+                          El parámetro retorna el objeto de la instancia.
+                        </p>
+
+                        <pre>
+                          <code class="language-js">
+                            const options = {
+                              // ...
+                              on: {
+                                afterDestroy: (data, instance) => {
+                                  console.log(data, instance);
+                                },
+                              };
+                            })
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Carousel -->
+            <section class="section-container" data-scrollspy-section="demo-carousel">
+              <div class="section-header">
+                <h2 class="section-title">Carousel</h2>
+                <p class="text">Contenido en formato de Slider/Carousel, donde todos los elementos están en una sola fila</p>
+              </div>
+              <div class="section-content">
+                <div class="swiper">
+                  <div class="swiper-wrapper items items-carousel" data-carousel></div>
+                  <div class="swiper-button-prev"></div>
+                  <div class="swiper-button-next"></div>
+                </div>
+              </div>
+              <div class="section-footer">
+                <h3 class="section-small-title">Código</h3>
+
+                <pre class="section-code-example">
+                  <code class="language-js">
+                    const options = {
+                      columns: "all",
+                    };
+
+                    const $titles = document.querySelectorAll(".item-card-info-title");
+                    new Hequalizer($titles, options);
+                  </code>
+                </pre>
+              </div>
+            </section>
+
+            <!-- Grid -->
+            <section class="section-container" data-scrollspy-section="demo-grid-responsive">
+              <div class="section-header">
+                <h2 class="section-title">Grid</h2>
+                <p class="text">Contenido en formato de grid con configuraciones adicionales para el responsive</p>
+              </div>
+              <div class="section-content">
+                <div class="items items-grid" data-grid-responsive></div>
+              </div>
+              <div class="section-footer">
+                <h3 class="section-small-title">Código</h3>
+                
+                <pre class="section-code-example">
+                  <code class="language-js">
+                    const gridOptions = {
+                      columns: 5,
+                      responsive: {
+                        1440: {
+                          columns: 4,
+                        },
+                        834: {
+                          columns: 3,
+                        },
+                        680: {
+                          columns: 2,
+                        },
+                        500: {
+                          columns: 1,
+                          resizeObserver: false, // Esto evita recalcular la altura en el resize
+                        }
+                      }
+                    };
+
+                    const $titles = document.querySelectorAll(".item-card-info-title");
+                    new Hequalizer($titles, gridOptions);
+                  </code>
+                </pre>
+              </div>
+            </section>
+          </div>
+          
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="main-footer">
+      <p class="text text-center">
+        <strong>
+          Hequalizer by <a href="https://github.com/soyleninjs" target="_blank">@soyleninjs</a>
+        </strong>
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Templates -->
+  <template id="template-item-card">
+    <div class="item-card swiper-slide">
+      <div class="item-card-image-wrapper">
+        <img loading="lazy" class="item-card-image" src="" alt="" />
+      </div>
+
+      <div class="item-card-info">
+        <h2 class="item-card-info-title"></h2>
+        <p class="item-card-info-description"></p>
+        <p class="item-card-info-rating"></p>
+        <p class="item-card-info-price number-color"></p>
+      </div>
+    </div>
+  </template>
+  
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script src="js/set-items.js"></script>
+  <script src="js/hunterscroll.js"></script>
+  <script src="js/floatsidebar.js"></script>
+  <script src="js/hequalizer.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>

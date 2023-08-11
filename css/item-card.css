@@ -1,0 +1,71 @@
+/* ==================== */
+/* Item */
+/* ==================== */
+
+.item-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-card-image-wrapper {
+  position: relative;
+  height: 0;
+  padding-bottom: 100%;
+  width: calc(100% - 25px);
+  border-radius: var(--hequalizer-border-radius);
+  margin: 0 auto -20px;
+  overflow: hidden;
+}
+.item-card-image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-position: bottom;
+  object-fit: cover;
+}
+
+.item-card-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: var(--hequalizer-accent-color);
+  padding: 30px 10px 10px;
+  border-radius: var(--hequalizer-border-radius);
+}
+
+.item-card-info-title,
+.item-card-info-description,
+.item-card-info-rating,
+.item-card-info-price {
+  margin-bottom: 10px;
+  min-height: var(--height);
+  color: var(--hequalizer-code-box-text-color);
+}
+
+.item-card-info-title {
+  font-size: 16px;
+}
+
+.item-card-info-description,
+.item-card-info-rating,
+.item-card-info-price {
+  font-size: 14px;
+}
+
+.item-card-info-rating {
+  display: flex;
+}
+.item-card-info-rating svg {
+  --size: 14px;
+  position: relative;
+  top: 2px;
+  width: var(--size);
+  height: var(--size);
+  margin-right: 6px;
+}
+.item-card-info-rating path {
+  fill: var(--black);
+}

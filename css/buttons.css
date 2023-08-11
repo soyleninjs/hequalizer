@@ -1,0 +1,80 @@
+/* ==================== */
+/* Buttons */
+/* ==================== */
+
+.button {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: var(--width, 300px);
+  height: var(--height, 50px);
+  background-color: var(--bg-color, var(--black));
+  padding: 0 10px;
+  border: var(--border-width, 0) solid var(--border-color, transparent) !important;
+  border-radius: var(--hequalizer-border-radius, 0);
+  overflow: hidden;
+  cursor: pointer;
+  appearance: none;
+  transition: background-color 0.3s;
+  will-change: background-color;
+  user-select: none;
+}
+
+.button, .button * {
+  text-align: center;
+  font-family: var(--primary-font-regular);
+  font-size: var(--font-size, 16px);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--text-color, var(--white));
+  white-space: nowrap;
+}
+
+.button:active {
+  background-color: var(--bg-color-hover, var(--white));
+}
+
+.button:active, .button:active * {
+  color: var(--text-color-hover, var(--black));
+}
+
+.button.full-width {
+  max-width: 100%;
+}
+
+.button.centered {
+  margin: 0 auto;
+}
+
+.button.uppercase , .button.uppercase  * {
+  text-transform: uppercase;
+}
+
+.button.autosize {
+  width: max-content;
+  max-width: 100%;
+  padding: 0 40px;
+}
+
+@media (hover: hover) {
+  .button:hover {
+    background-color: var(--bg-color-hover, var(--white));
+  }
+  .button:hover, .button:hover * {
+    color: var(--text-color-hover, var(--black));
+  }
+}
+
+/* primary */
+.button.button-primary {
+  --width: 150px;
+  --height: 40px;
+  --bg-color: var(--tertiary-color);
+  --bg-color-hover: var(--primary-color);
+  --text-color: var(--black);
+  --text-color-hover: var(--white);
+  --font-size: 14px;
+}

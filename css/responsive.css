@@ -1,0 +1,110 @@
+@media (max-width: 900px) {
+  :root {
+
+  }
+  
+  .layout {
+    --layout: minmax(0, 1fr);
+  }
+
+  .layout-left-side {
+    display: none;
+  }
+
+  /* Mobile Sidebar */
+  .float-sidebar-button-wrapper {
+    display: flex;
+  }
+
+  /* Tables */
+  .table-wrapper {
+    --hequalizer-table-col-padding: 10px 15px;
+    --hequalizer-table-4-cols: minmax(0, 1fr);
+    --hequalizer-table-3-cols: minmax(0, 1fr);
+  }
+
+  .table-row {
+    & .table-column {
+      &::before {
+        display: block;
+        color: var(--hequalizer-code-box-text-header-color);
+      }
+
+      &:nth-child(1) {
+        &::before {
+          content: "Nombre:";
+        }
+      }
+
+      &:nth-child(2) {
+        &::before {
+          content: "Tipo:";
+        }
+      }
+
+      &:nth-child(3) {
+        &::before {
+          content: "Default:";
+        }
+      }
+
+      &:nth-child(4) {
+        &::before {
+          content: "Descripción:";
+        }
+      }
+    }
+  }
+
+  .table-3-columns-row {
+    & .table-column {
+      &:nth-child(1) {
+        &::before {
+          content: "Nombre:";
+        }
+      }
+
+      &:nth-child(2) {
+        &::before {
+          content: "Tipo:";
+        }
+      }
+
+      &:nth-child(3) {
+        &::before {
+          content: "Descripción:";
+        }
+      }
+    }
+  }
+
+  .table-methods,
+  .table-events {
+    & .table-3-columns-row {
+      & .table-column {
+        &:nth-child(2) {
+          &::before {
+            content: "Parámentros:";
+          }
+        }
+      }
+    }
+  } 
+
+
+  .table-row-header {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .items-grid {
+    --columns: 2;
+  }
+}
+
+@media (max-width: 500px) {
+  .items-grid {
+    --columns: 1;
+  }
+}

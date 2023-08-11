@@ -1,0 +1,19 @@
+{
+  "name": "hequalizer",
+  "version": "0.0.1",
+  "description": "Script para colocar la altura maxima entre un conjunto de elementos.",
+  "main": "hequalizer.min.js",
+  "keywords": [
+    "hequalizer",
+    "equalizer",
+    "align",
+    "vertical",
+    "DOM",
+    "height",
+    "elements",
+    "javascript",
+    "js"
+  ],
+  "author": "@soyleninjs",
+  "license": "ISC"
+}

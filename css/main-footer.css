@@ -1,0 +1,17 @@
+.main-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--tertiary-color);
+  padding: 0 25px;
+  height: 60px;
+}
+
+.main-footer p {
+  margin: 0;
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  color: transparent;
+  -webkit-background-clip: text;
+  font-size: 18px;
+}
