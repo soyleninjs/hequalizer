@@ -1,36 +1,7 @@
-/* eslint-disable no-empty-function, no-unused-vars */
-
-/*
- * En el metodo destroy ahora se le puede pasar un parametro Booleano para tambien destruir la instacia totalmente ✅
- * Nuevo metodo en el objeto global para borrar directamente una instancia con base a su ID ✅
- * Se cambiara el core, para que el responsive solo funcione en un primer nivel y se puedan se configurar
-   mas facil en responsive con un nuevo script ✅
- * Se elimino el sistema de debug. ✅
- * Se removieron los metodos de startResizeCalculation, stopResizeCalculation, startChangesObserver, stopChangesObserver
-   de la instancia, se cambiaron a metodos internos ✅
- * Se Coloco la nueva opcion de activar o desactivar el resize ✅
- * Se removio la "autoInit" opcion ✅
- * Nuevos datos en la instancia (actualBreakpoint, actualOptions, responsive) ✅
- * Limpieza y optmizacion de codigo interno ✅
- * Nueva opcion "responsive", es un objeto en el cual solo se pueden actualizar/cambiar las siguientes propiedades ✅
-    - cssVariable
-    - columns
-    - initialIndex
-    - resizeObserver
-    - classElementToOmit
-    - on y todos sus metodos internos
- * 
- * 
- * 
- * 
- * Demo
- * Nuevo Diseño de Elementos ✅
- * Agregar bloque de codigo de ejemplo ✅
- * 
- * 
- * 
- * 
- */
+/**
+ * Hequalizer v1.0.0
+ *
+*/
 
 const HequalizerUtils = {
   mergeDeepObject: (...objects) => {
@@ -115,11 +86,11 @@ function Hequalizer(nodeElementsArray, newOptions = {}) {
     resizeObserver: true,
     classElementToOmit: '',
     on: {
-      init: (data, instance) => {},
-      afterResize: (data, instance) => {},
-      afterChanges: (data, instance) => {},
-      afterUpdate: (data, instance) => {},
-      afterDestroy: (instance) => {},
+      init: ({rows, instance}) => {},
+      afterResize: ({rows, instance}) => {},
+      afterChanges: ({rows, instance}) => {},
+      afterUpdate: ({rows, instance}) => {},
+      afterDestroy: ({rows, instance}) => {},
     },
     responsive: {}
   };
@@ -175,21 +146,21 @@ function Hequalizer(nodeElementsArray, newOptions = {}) {
     }
   }
 
-  const setCallbacks = (calledOn, data) => {
+  const setCallbacks = (calledOn, rows = null) => {
     if (calledOn === 'init') {
-      actualOptions.on.init(data, this);
+      actualOptions.on.init({rows, instance: this});
     }
     if (calledOn === 'resize') {
-      actualOptions.on.afterResize(data, this);
+      actualOptions.on.afterResize({rows, instance: this});
     }
     if (calledOn === 'changes') {
-      actualOptions.on.afterChanges(data, this);
+      actualOptions.on.afterChanges({rows, instance: this});
     }
     if (calledOn === 'update') {
-      actualOptions.on.afterUpdate(data, this);
+      actualOptions.on.afterUpdate({rows, instance: this});
     }
     if (calledOn === 'destroy') {
-      actualOptions.on.afterDestroy(this);
+      actualOptions.on.afterDestroy({rows,instance: this});
     }
   };
 
@@ -315,6 +286,7 @@ function Hequalizer(nodeElementsArray, newOptions = {}) {
       elementsChangesObservers[index].observe(element, {
         childList: true,
         subtree: true,
+        characterData: true,
       });
     });
   };
@@ -350,12 +322,6 @@ function Hequalizer(nodeElementsArray, newOptions = {}) {
 
     if (destroyInstance) {
       window.HequalizerAPI.removeInstance(this.id)
-
-      for (let prop in this) {
-        if (this.hasOwnProperty(prop)) {
-          delete this[prop];
-        }
-      }
     }
 
     setCallbacks('destroy');
@@ -365,13 +331,11 @@ function Hequalizer(nodeElementsArray, newOptions = {}) {
 
   // ------------------------ INIT ------------------------
 
-  document.fonts.ready
-    .then(() => {
+  document.addEventListener('DOMContentLoaded', () => {
+    window.setTimeout(() => {
       this.init();
-    })
-    .catch((error) => {
-      window.console.log(error);
-    });
+    }, 100);
+  });
 
   window.HequalizerAPI.Instances.push(this);
   return this;

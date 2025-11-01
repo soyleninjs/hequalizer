@@ -1,19 +1,53 @@
 {
   "name": "hequalizer",
-  "version": "0.0.1",
-  "description": "Script para colocar la altura maxima entre un conjunto de elementos.",
+  "version": "1.0.0",
+  "description": "Librería JavaScript ligera que iguala automáticamente las alturas de elementos DOM mediante variables CSS. Perfecta para layouts perfectamente alineados en carousels, grids y tarjetas.",
   "main": "hequalizer.min.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soyleninjs/hequalizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/soyleninjs/hequalizer/issues"
+  },
+  "homepage": "https://hequalizer.soylenin.com",
   "keywords": [
     "hequalizer",
     "equalizer",
+    "height-equalizer",
+    "equal-heights",
     "align",
-    "vertical",
+    "alignment",
+    "vertical-align",
+    "layout",
+    "responsive",
+    "grid",
+    "carousel",
+    "cards",
+    "swiper",
     "DOM",
     "height",
     "elements",
+    "css-variables",
+    "custom-properties",
+    "mutation-observer",
+    "vanilla-js",
     "javascript",
-    "js"
+    "js",
+    "frontend",
+    "ui",
+    "framework-agnostic",
+    "zero-dependencies"
   ],
-  "author": "@soyleninjs",
-  "license": "ISC"
+  "author": {
+    "name": "@soyleninjs",
+    "url": "https://github.com/soyleninjs"
+  },
+  "license": "MIT",
+  "files": [
+    "hequalizer.min.js",
+    "hequalizer.js",
+    "README.md",
+    "LICENSE"
+  ]
 }

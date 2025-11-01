@@ -1,1047 +1,1358 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="assets/logo.svg">
-  <title>Set Height Elements</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1, shrink-to-fit=no">
 
-  <link rel="stylesheet" href="css/index.css">
-  <link rel="stylesheet" href="css/component-float-sidebar.css">
-  <link rel="stylesheet" href="css/item-card.css">
-  <link rel="stylesheet" href="css/main-menu.css">
-  <link rel="stylesheet" href="css/main-footer.css">
-  <link rel="stylesheet" href="css/sidebar.css">
-  <link rel="stylesheet" href="css/content.css">
-  <link rel="stylesheet" href="css/responsive.css">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Hequalizer - Igualación automática de alturas DOM" />
+    <meta property="og:description" content="Librería JavaScript ligera que iguala automáticamente las alturas de elementos DOM mediante variables CSS. Responsive, zero dependencies y framework agnostic." />
+    <meta property="og:image" content="https://hequalizer.soylenin.com/assets/og-image.jpg" />
+    <meta property="og:url" content="https://hequalizer.soylenin.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hequalizer" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@soyleninjs" />
+    <meta name="twitter:creator" content="@soyleninjs" />
+    <meta name="twitter:title" content="Hequalizer - Igualación automática de alturas DOM" />
+    <meta name="twitter:description" content="Librería JavaScript ligera que iguala automáticamente las alturas de elementos DOM mediante variables CSS. Responsive, zero dependencies y framework agnostic." />
+    <meta name="twitter:image" content="https://hequalizer.soylenin.com/assets/og-image.jpg" />
+
+    <!-- SEO -->
+    <meta name="description" content="Hequalizer - Librería JavaScript ligera que iguala automáticamente las alturas de elementos DOM mediante variables CSS" />
+    <meta name="keywords" content="Hequalizer, JavaScript library, height equalizer, equal heights, CSS variables, DOM manipulation, responsive design, carousel, grid layout, vanilla JS">
+    <meta name="author" content="Lenin Mazariegos" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+
+    <!-- Title -->
+    <title>Hequalizer - Height Equalizer for DOM Elements</title>
+
+    <!-- DarkUI CSS -->
+    <link href="ui/darkui.css" rel="stylesheet" />
+
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+    <style>
+        /* Hero section */
+        .hero {
+            background: var(--darkui-gradient-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 70%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Features grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--darkui-spacing-6);
+        }
+
+        .feature-card {
+            background: var(--darkui-bg-secondary);
+            border: 1px solid var(--darkui-border-primary);
+            border-radius: var(--darkui-radius-lg);
+            padding: var(--darkui-spacing-6);
+            transition: all var(--darkui-transition-base);
+        }
+
+        .feature-card:hover {
+            border-color: var(--darkui-color-primary);
+            box-shadow: 0 0 2rem rgba(102, 126, 234, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--darkui-gradient-primary);
+            border-radius: var(--darkui-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--darkui-spacing-4);
+            font-size: 24px;
+        }
+
+        /* Code blocks styling */
+        .code-example {
+            background: var(--darkui-bg-elevated);
+            border: 1px solid var(--darkui-border-primary);
+            border-radius: var(--darkui-radius-lg);
+            overflow: hidden;
+            margin-bottom: var(--darkui-spacing-6);
+        }
+
+        .code-example-header {
+            background: var(--darkui-bg-tertiary);
+            padding: var(--darkui-spacing-3) var(--darkui-spacing-4);
+            border-bottom: 1px solid var(--darkui-border-primary);
+            font-size: var(--darkui-font-size-sm);
+            color: var(--darkui-text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-example pre {
+            margin: 0;
+            padding: var(--darkui-spacing-4);
+            overflow-x: auto;
+        }
+
+        .code-example pre code {
+            font-family: var(--darkui-font-mono);
+            font-size: var(--darkui-font-size-sm);
+        }
+
+        /* Stats section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--darkui-spacing-6);
+            margin: var(--darkui-spacing-8) 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: var(--darkui-spacing-6);
+            background: var(--darkui-bg-secondary);
+            border: 1px solid var(--darkui-border-primary);
+            border-radius: var(--darkui-radius-lg);
+        }
+
+        .stat-number {
+            font-size: var(--darkui-font-size-4xl);
+            font-weight: var(--darkui-font-weight-extrabold);
+            background: var(--darkui-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--darkui-spacing-2);
+        }
+
+        /* Sidebar customization for desktop */
+        .hequalizer-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--darkui-bg-secondary);
+            border-right: 1px solid var(--darkui-border-primary);
+            overflow-y: auto;
+            z-index: var(--darkui-z-sticky);
+        }
+
+        .hequalizer-sidebar-header {
+            padding: var(--darkui-spacing-5) var(--darkui-spacing-4);
+            border-bottom: 1px solid var(--darkui-border-primary);
+            position: sticky;
+            top: 0;
+            background: var(--darkui-bg-secondary);
+            z-index: 1;
+        }
+
+        .hequalizer-sidebar-icons {
+            display: flex;
+            gap: var(--darkui-spacing-2);
+            margin-top: var(--darkui-spacing-2);
+        }
+
+        .hequalizer-sidebar-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            color: var(--darkui-text-secondary);
+            background: var(--darkui-bg-tertiary);
+            border-radius: var(--darkui-radius-md);
+            transition: all var(--darkui-transition-fast);
+        }
+
+        .hequalizer-sidebar-icons a:hover {
+            color: var(--darkui-text-primary);
+            background: var(--darkui-bg-elevated);
+            transform: translateY(-2px);
+        }
+
+        .hequalizer-sidebar-nav {
+            padding: var(--darkui-spacing-3) var(--darkui-spacing-4);
+        }
+
+        .hequalizer-sidebar-nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .hequalizer-sidebar-nav a {
+            display: block;
+            padding: var(--darkui-spacing-2) var(--darkui-spacing-3);
+            color: var(--darkui-text-secondary);
+            text-decoration: none;
+            border-radius: var(--darkui-radius-sm);
+            transition: all var(--darkui-transition-fast);
+            font-size: var(--darkui-font-size-sm);
+        }
+
+        .hequalizer-sidebar-nav a:hover {
+            background: var(--darkui-bg-tertiary);
+            color: var(--darkui-text-primary);
+        }
+
+        .hequalizer-sidebar-nav a.active {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.15)) !important;
+            color: var(--darkui-text-primary) !important;
+            border-left: 2px solid #8b5cf6;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+
+        /* Responsive - hide desktop sidebar and show mobile sidebar on small screens */
+        @media (max-width: 1024px) {
+            .hequalizer-sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                display: block;
+            }
+        }
+
+        /* Hide mobile sidebar on desktop */
+        @media (min-width: 1025px) {
+            .sidebar {
+                display: none;
+            }
+        }
+
+        /* Mobile sidebar link hover styles */
+        .sidebar-body a:hover {
+            background: var(--darkui-bg-tertiary) !important;
+            color: var(--darkui-text-primary) !important;
+        }
+
+        /* Mobile sidebar active link styles */
+        .sidebar-body a.active {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.15)) !important;
+            color: var(--darkui-text-primary) !important;
+            border-left: 2px solid #8b5cf6;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: var(--darkui-font-size-3xl);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Options table */
+        .options-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--darkui-spacing-4) 0;
+        }
+
+        .options-table th,
+        .options-table td {
+            padding: var(--darkui-spacing-3);
+            text-align: left;
+            border-bottom: 1px solid var(--darkui-border-primary);
+        }
+
+        .options-table th {
+            background: var(--darkui-bg-tertiary);
+            font-weight: var(--darkui-font-weight-semibold);
+            color: var(--darkui-text-primary);
+        }
+
+        .options-table code {
+            background: var(--darkui-bg-tertiary);
+            padding: 0.125rem 0.375rem;
+            border-radius: var(--darkui-radius-sm);
+            font-size: var(--darkui-font-size-sm);
+            color: var(--darkui-color-primary);
+        }
+    </style>
 </head>
 <body>
-
-  <div class="main-wrapper">
-    
-    <header class="main-header container">
-      <div class="main-header-logo-wrapper">
-        <img class="main-header-logo" width="40" height="40" src="assets/logo.svg" alt="logo">
-        <h1 class="main-header-title">Hequalizer</h1>
-      </div>
-
-      <div class="main-header-icons-wrapper">
-        <a href="/" class="main-header-icon-wrapper">
-          <svg class="main-header-icon" width="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-            <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
-          </svg>
-        </a>
-        <a href="/" class="main-header-icon-wrapper">
-          <svg class="main-header-icon" width="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-            <path d="M4 10v4h2v-3h1v3h1v-4H4m5 0v5h2v-1h2v-4H9m3 1v2h-1v-2h1m2-1v4h2v-3h1v3h1v-3h1v3h1v-4h-6M3 9h18v6h-9v1H8v-1H3V9Z"/>
-          </svg>
-        </a>
-        <button class="main-header-icon-wrapper" data-button-theme-mode>
-          <svg class="main-header-icon main-header-icon-night" width="26" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-            <path d="M12 22c5.523 0 10-4.477 10-10c0-.463-.694-.54-.933-.143a6.5 6.5 0 1 1-8.924-8.924C12.54 2.693 12.463 2 12 2C6.477 2 2 6.477 2 12s4.477 10 10 10Z"/>
-          </svg>
-          <svg class="main-header-icon main-header-icon-day" width="26" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-            <path d="M120 40V16a8 8 0 0 1 16 0v24a8 8 0 0 1-16 0Zm8 24a64 64 0 1 0 64 64a64.07 64.07 0 0 0-64-64Zm-69.66 5.66a8 8 0 0 0 11.32-11.32l-16-16a8 8 0 0 0-11.32 11.32Zm0 116.68l-16 16a8 8 0 0 0 11.32 11.32l16-16a8 8 0 0 0-11.32-11.32ZM192 72a8 8 0 0 0 5.66-2.34l16-16a8 8 0 0 0-11.32-11.32l-16 16A8 8 0 0 0 192 72Zm5.66 114.34a8 8 0 0 0-11.32 11.32l16 16a8 8 0 0 0 11.32-11.32ZM48 128a8 8 0 0 0-8-8H16a8 8 0 0 0 0 16h24a8 8 0 0 0 8-8Zm80 80a8 8 0 0 0-8 8v24a8 8 0 0 0 16 0v-24a8 8 0 0 0-8-8Zm112-88h-24a8 8 0 0 0 0 16h24a8 8 0 0 0 0-16Z"/>
-          </svg>
-        </button>
-      </div>    
-    </header>
-    
-    <main class="main-content container">
-
-      <float-sidebar data-animation-duration="0.4">
-        <div class="float-sidebar-button-wrapper">
-          <div class="float-sidebar-button" data-sidebar-button-open>
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 8h12M6 12h12M6 16h12"/>
-            </svg>
-          </div>
-        </div>
-
-        <div class="float-sidebar" data-sidebar>
-          <div class="float-sidebar-mask" data-sidebar-mask></div>
-
-          <div class="float-sidebar-container">
-            
-            <div class="float-sidebar-container-int">
-              
-              <div class="float-sidebar-icon-close-wrapper" data-sidebar-button-close>
-                <span class="float-sidebar-icon-close"></span>
-              </div>
-
-              <div class="float-sidebar-content">
-                <div class="float-sidebar-content-scrolleable">
-                  <div class="side-wrapper">
-                    <!-- <div class="side-title">Hequalizer</div> -->
-                    <div class="side-menu">
-
-                      <a class="side-menu-button" href="#" data-scrollspy-button="intro">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 17.75l-6.172 3.245l1.179-6.873l-5-4.867l6.9-1l3.086-6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/>
-                        </svg>
-                        Intro
-                      </a>
-
-                      <a class="side-menu-button" href="#" data-scrollspy-button="installation">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                          <path d="m10.05 10.607l-7.07 7.07a2 2 0 0 0 0 2.83v0a2 2 0 0 0 2.828 0l7.07-7.072m-2.828-2.828c-.844-2.153-.679-4.978 1.06-6.718c1.74-1.74 4.95-2.121 6.718-1.06l-3.04 3.04l-.283 3.111l3.111-.282l3.04-3.041c1.062 1.768.68 4.978-1.06 6.717c-1.74 1.74-4.564 1.905-6.717 1.061"/>
-                        </svg>
-                        Instalación
-                        <!-- <span class="notification-number updates">3</span> -->
-                      </a>
-
-                      <a class="side-menu-button" href="#" data-scrollspy-button="initialization">
-                        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                          <path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224c.231.114.454.243.668.386c.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63c.27.385.506.792.704 1.218c.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294c.016.257.016.515 0 .772c-.01.147.038.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.977 7.977 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.102-.302c-.067-.019-.177-.011-.3.071a5.909 5.909 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.29 1.106c-.168.646-.715 1.196-1.458 1.26a8.006 8.006 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.079-.158-.212-.224a5.738 5.738 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a8.12 8.12 0 0 1-.704-1.218c-.315-.675-.111-1.422.363-1.891l.815-.806c.05-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.038-.246-.088-.294l-.815-.806C.635 6.045.431 5.298.746 4.623a7.92 7.92 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.102.302c.067.019.177.011.3-.071c.214-.143.437-.272.668-.386c.133-.066.194-.158.211-.224l.29-1.106C6.009.645 6.556.095 7.299.03C7.53.01 7.764 0 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189c-.173.086-.34.183-.5.29c-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045c-.22.312-.412.644-.573.99c-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.081.08-.073.159-.059.19c.162.346.353.677.573.989c.02.03.085.076.195.046l1.102-.303c.56-.153 1.113-.008 1.53.27c.161.107.328.204.501.29c.447.222.85.629.997 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.036.137-.146l.289-1.105c.147-.561.549-.967.998-1.189c.173-.086.34-.183.5-.29c.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045c.22-.313.411-.644.573-.99c.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.081-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.102.303c-.56.153-1.113.008-1.53-.27a4.44 4.44 0 0 0-.501-.29c-.447-.222-.85-.629-.997-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0a3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z"/>
-                        </svg>
-                        Inicializar
-                      </a>
-
-                      <a class="side-menu-button" href="#" data-scrollspy-button="parameters">
-                        <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                          <path d="M54.8 119.49a35.06 35.06 0 0 1-5.75 8.51a35.06 35.06 0 0 1 5.75 8.51C60 147.24 60 159.83 60 172c0 25.94 1.84 32 20 32a12 12 0 0 1 0 24c-19.14 0-32.2-6.9-38.8-20.51C36 196.76 36 184.17 36 172c0-25.94-1.84-32-20-32a12 12 0 0 1 0-24c18.16 0 20-6.06 20-32c0-12.17 0-24.76 5.2-35.49C47.8 34.9 60.86 28 80 28a12 12 0 0 1 0 24c-18.16 0-20 6.06-20 32c0 12.17 0 24.76-5.2 35.49ZM240 116c-18.16 0-20-6.06-20-32c0-12.17 0-24.76-5.2-35.49C208.2 34.9 195.14 28 176 28a12 12 0 0 0 0 24c18.16 0 20 6.06 20 32c0 12.17 0 24.76 5.2 35.49A35.06 35.06 0 0 0 207 128a35.06 35.06 0 0 0-5.75 8.51C196 147.24 196 159.83 196 172c0 25.94-1.84 32-20 32a12 12 0 0 0 0 24c19.14 0 32.2-6.9 38.8-20.51c5.2-10.73 5.2-23.32 5.2-35.49c0-25.94 1.84-32 20-32a12 12 0 0 0 0-24Z"/>
-                        </svg>
-                        Parámetros
-                      </a>
-
-                      <a class="side-menu-button" href="#" data-scrollspy-button="methods">
-                        <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                          <path d="M82.33 222.19a12 12 0 0 1-16.5 4.09C64 225.16 20 198 20 128s44-97.16 45.83-98.28a12 12 0 0 1 12.41 20.53C76.71 51.21 44 72.31 44 128s32.85 76.88 34.25 77.75a12 12 0 0 1 4.08 16.44ZM190.17 29.72a12 12 0 1 0-12.42 20.53c1.4.87 34.25 21.94 34.25 77.75s-32.85 76.88-34.17 77.7a12 12 0 1 0 12.34 20.58C192 225.16 236 198 236 128s-44-97.16-45.83-98.28Z"/>
-                        </svg>
-                        Métodos
-                      </a>
-
-                      <a class="side-menu-button" href="#" data-scrollspy-button="events">
-                        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                          <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0a6.5 6.5 0 0 0-13 0Zm4.879-2.773l4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"/>
-                        </svg>
-                        Eventos
-                      </a>
-
-                    </div>
-                  </div>
-
-                  <div class="side-wrapper">
-                    <div class="side-title">Demos</div>
-                    <div class="side-menu">
-
-                      <a class="side-menu-button" href="#" data-scrollspy-button="demo-carousel">
-                        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                          <path d="M22 26H10a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2zM10 8v16h12V8zM4 24H0v-2h4V10H0V8h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2zm28 0h-4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h4v2h-4v12h4z"/>
-                        </svg>
-                        Carousel
-                      </a>
-
-                      <a class="side-menu-button" href="#" data-scrollspy-button="demo-grid-responsive">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                          <path d="M5 3h13a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3m0 1a2 2 0 0 0-2 2v3h5V4H5M3 19a2 2 0 0 0 2 2h3v-5H3v3m5-9H3v5h5v-5m10 11a2 2 0 0 0 2-2v-3h-5v5h3m2-11h-5v5h5v-5m0-4a2 2 0 0 0-2-2h-3v5h5V6M9 4v5h5V4H9m0 17h5v-5H9v5m5-11H9v5h5v-5Z"/>
-                        </svg>
-                        Grid
-                      </a>
-
-                    </div>
-                  </div>
+    <!-- Desktop Sidebar Navigation -->
+    <aside class="hequalizer-sidebar">
+        <div class="hequalizer-sidebar-header">
+            <div>
+                <div style="display: flex; align-items: center; gap: var(--darkui-spacing-3);">
+                    <img src="assets/logo.svg" alt="Hequalizer Logo" style="width: 32px; height: 32px;">
+                    <span class="text-xl font-bold">Hequalizer</span>
                 </div>
-              </div>
-              
+                <p style="color: var(--darkui-text-tertiary); font-size: var(--darkui-font-size-sm);">
+                    v1.0.0
+                </p>
+                <div class="hequalizer-sidebar-icons">
+                    <a href="https://github.com/soyleninjs/hequalizer" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="Ver en GitHub">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.npmjs.com/package/hequalizer" target="_blank" rel="noopener noreferrer" aria-label="npm" title="Ver en npm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M0 0v16h16v-16h-16zM13 13h-2v-8h-3v8h-5v-11h10v11z"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
-            
-          </div>
         </div>
-      </float-sidebar>
-      
-      <div class="layout">
-        <!-- Sidebar -->
-        <div class="layout-left-side">
-          <div class="sidebar">
 
-            <div class="side-wrapper">
-              <!-- <div class="side-title">Hequalizer</div> -->
-              <div class="side-menu">
+        <nav class="hequalizer-sidebar-nav">
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#features">Características</a></li>
+                <li><a href="#installation">Instalación</a></li>
+                <li><a href="#usage">Uso Básico</a></li>
+                <li><a href="#configuration">Configuración</a></li>
+                <li><a href="#api">API</a></li>
+                <li><a href="#responsive">Responsive</a></li>
+                <li><a href="#examples">Ejemplos</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-                <a class="side-menu-button" href="#" data-scrollspy-button="intro">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 17.75l-6.172 3.245l1.179-6.873l-5-4.867l6.9-1l3.086-6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/>
-                  </svg>
-                  Intro
-                </a>
+    <!-- Mobile Sidebar (DarkUI native component) -->
+    <div class="sidebar">
+        <details>
+            <summary class="button button-secondary button-sm button-icon" style="position: fixed; top: var(--darkui-spacing-4); left: var(--darkui-spacing-4); z-index: var(--darkui-z-sticky);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </summary>
+            <div>
+                <div data-mask></div>
+                <div class="sidebar-content">
+                    <div class="sidebar-header">
+                        <div class="flex flex-align-items-start flex-justify-between">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: var(--darkui-spacing-3);">
+                                    <img src="assets/logo.svg" alt="Hequalizer Logo" style="width: 32px; height: 32px;">
+                                    <span class="text-xl font-bold">Hequalizer</span>
+                                </div>
+                                <p style="color: var(--darkui-text-tertiary); font-size: var(--darkui-font-size-sm);">
+                                    v1.0.0
+                                </p>
+                            </div>
+                            <button class="button button-icon button-ghost" data-close aria-label="Cerrar menú">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="sidebar-body">
+                        <nav style="padding: 0;">
+                            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0;">
+                                <li><a href="#inicio" data-close style="display: block; padding: var(--darkui-spacing-2) var(--darkui-spacing-3); color: var(--darkui-text-secondary); text-decoration: none; border-radius: var(--darkui-radius-sm); transition: all var(--darkui-transition-fast); font-size: var(--darkui-font-size-sm);">Inicio</a></li>
+                                <li><a href="#features" data-close style="display: block; padding: var(--darkui-spacing-2) var(--darkui-spacing-3); color: var(--darkui-text-secondary); text-decoration: none; border-radius: var(--darkui-radius-sm); transition: all var(--darkui-transition-fast); font-size: var(--darkui-font-size-sm);">Características</a></li>
+                                <li><a href="#installation" data-close style="display: block; padding: var(--darkui-spacing-2) var(--darkui-spacing-3); color: var(--darkui-text-secondary); text-decoration: none; border-radius: var(--darkui-radius-sm); transition: all var(--darkui-transition-fast); font-size: var(--darkui-font-size-sm);">Instalación</a></li>
+                                <li><a href="#usage" data-close style="display: block; padding: var(--darkui-spacing-2) var(--darkui-spacing-3); color: var(--darkui-text-secondary); text-decoration: none; border-radius: var(--darkui-radius-sm); transition: all var(--darkui-transition-fast); font-size: var(--darkui-font-size-sm);">Uso Básico</a></li>
+                                <li><a href="#configuration" data-close style="display: block; padding: var(--darkui-spacing-2) var(--darkui-spacing-3); color: var(--darkui-text-secondary); text-decoration: none; border-radius: var(--darkui-radius-sm); transition: all var(--darkui-transition-fast); font-size: var(--darkui-font-size-sm);">Configuración</a></li>
+                                <li><a href="#api" data-close style="display: block; padding: var(--darkui-spacing-2) var(--darkui-spacing-3); color: var(--darkui-text-secondary); text-decoration: none; border-radius: var(--darkui-radius-sm); transition: all var(--darkui-transition-fast); font-size: var(--darkui-font-size-sm);">API</a></li>
+                                <li><a href="#responsive" data-close style="display: block; padding: var(--darkui-spacing-2) var(--darkui-spacing-3); color: var(--darkui-text-secondary); text-decoration: none; border-radius: var(--darkui-radius-sm); transition: all var(--darkui-transition-fast); font-size: var(--darkui-font-size-sm);">Responsive</a></li>
+                                <li><a href="#examples" data-close style="display: block; padding: var(--darkui-spacing-2) var(--darkui-spacing-3); color: var(--darkui-text-secondary); text-decoration: none; border-radius: var(--darkui-radius-sm); transition: all var(--darkui-transition-fast); font-size: var(--darkui-font-size-sm);">Ejemplos</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </details>
+    </div>
 
-                <a class="side-menu-button" href="#" data-scrollspy-button="installation">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                    <path d="m10.05 10.607l-7.07 7.07a2 2 0 0 0 0 2.83v0a2 2 0 0 0 2.828 0l7.07-7.072m-2.828-2.828c-.844-2.153-.679-4.978 1.06-6.718c1.74-1.74 4.95-2.121 6.718-1.06l-3.04 3.04l-.283 3.111l3.111-.282l3.04-3.041c1.062 1.768.68 4.978-1.06 6.717c-1.74 1.74-4.564 1.905-6.717 1.061"/>
-                  </svg>
-                  Instalación
-                  <!-- <span class="notification-number updates">3</span> -->
-                </a>
+    <!-- Main Content -->
+    <div class="main-content">
 
-                <a class="side-menu-button" href="#" data-scrollspy-button="initialization">
-                  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                    <path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224c.231.114.454.243.668.386c.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63c.27.385.506.792.704 1.218c.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294c.016.257.016.515 0 .772c-.01.147.038.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.977 7.977 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.102-.302c-.067-.019-.177-.011-.3.071a5.909 5.909 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.29 1.106c-.168.646-.715 1.196-1.458 1.26a8.006 8.006 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.079-.158-.212-.224a5.738 5.738 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a8.12 8.12 0 0 1-.704-1.218c-.315-.675-.111-1.422.363-1.891l.815-.806c.05-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.038-.246-.088-.294l-.815-.806C.635 6.045.431 5.298.746 4.623a7.92 7.92 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.102.302c.067.019.177.011.3-.071c.214-.143.437-.272.668-.386c.133-.066.194-.158.211-.224l.29-1.106C6.009.645 6.556.095 7.299.03C7.53.01 7.764 0 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189c-.173.086-.34.183-.5.29c-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045c-.22.312-.412.644-.573.99c-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.081.08-.073.159-.059.19c.162.346.353.677.573.989c.02.03.085.076.195.046l1.102-.303c.56-.153 1.113-.008 1.53.27c.161.107.328.204.501.29c.447.222.85.629.997 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.036.137-.146l.289-1.105c.147-.561.549-.967.998-1.189c.173-.086.34-.183.5-.29c.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045c.22-.313.411-.644.573-.99c.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.081-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.102.303c-.56.153-1.113.008-1.53-.27a4.44 4.44 0 0 0-.501-.29c-.447-.222-.85-.629-.997-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0a3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z"/>
-                  </svg>
-                  Inicializar
-                </a>
+    <!-- Hero Section -->
+    <section id="inicio" class="hero" style="padding: var(--darkui-spacing-12) 0;">
+        <div class="container hero-content">
+            <div style="text-align: center; max-width: 900px; margin: 0 auto;">
+                <div style="display: inline-flex; align-items: center; gap: var(--darkui-spacing-3); margin-bottom: var(--darkui-spacing-6);">
+                    <img src="assets/logo.svg" alt="Hequalizer Logo" style="width: 80px; height: 80px;">
+                </div>
 
-                <a class="side-menu-button" href="#" data-scrollspy-button="parameters">
-                  <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                    <path d="M54.8 119.49a35.06 35.06 0 0 1-5.75 8.51a35.06 35.06 0 0 1 5.75 8.51C60 147.24 60 159.83 60 172c0 25.94 1.84 32 20 32a12 12 0 0 1 0 24c-19.14 0-32.2-6.9-38.8-20.51C36 196.76 36 184.17 36 172c0-25.94-1.84-32-20-32a12 12 0 0 1 0-24c18.16 0 20-6.06 20-32c0-12.17 0-24.76 5.2-35.49C47.8 34.9 60.86 28 80 28a12 12 0 0 1 0 24c-18.16 0-20 6.06-20 32c0 12.17 0 24.76-5.2 35.49ZM240 116c-18.16 0-20-6.06-20-32c0-12.17 0-24.76-5.2-35.49C208.2 34.9 195.14 28 176 28a12 12 0 0 0 0 24c18.16 0 20 6.06 20 32c0 12.17 0 24.76 5.2 35.49A35.06 35.06 0 0 0 207 128a35.06 35.06 0 0 0-5.75 8.51C196 147.24 196 159.83 196 172c0 25.94-1.84 32-20 32a12 12 0 0 0 0 24c19.14 0 32.2-6.9 38.8-20.51c5.2-10.73 5.2-23.32 5.2-35.49c0-25.94 1.84-32 20-32a12 12 0 0 0 0-24Z"/>
-                  </svg>
-                  Parámetros
-                </a>
+                <h1 class="heading-1" style="margin-bottom: var(--darkui-spacing-4);">
+                    Iguala alturas perfectamente,<br>
+                    <span class="text-gradient">sin complicaciones</span>
+                </h1>
 
-                <a class="side-menu-button" href="#" data-scrollspy-button="methods">
-                  <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                    <path d="M82.33 222.19a12 12 0 0 1-16.5 4.09C64 225.16 20 198 20 128s44-97.16 45.83-98.28a12 12 0 0 1 12.41 20.53C76.71 51.21 44 72.31 44 128s32.85 76.88 34.25 77.75a12 12 0 0 1 4.08 16.44ZM190.17 29.72a12 12 0 1 0-12.42 20.53c1.4.87 34.25 21.94 34.25 77.75s-32.85 76.88-34.17 77.7a12 12 0 1 0 12.34 20.58C192 225.16 236 198 236 128s-44-97.16-45.83-98.28Z"/>
-                  </svg>
-                  Métodos
-                </a>
+                <p class="text-xl" style="color: var(--darkui-text-secondary); margin-bottom: var(--darkui-spacing-8); max-width: 700px; margin-left: auto; margin-right: auto;">
+                    Librería JavaScript ligera que iguala automáticamente las alturas de elementos DOM mediante variables CSS.
+                    Perfecta para carousels, grids y layouts responsivos.
+                </p>
 
-                <a class="side-menu-button" href="#" data-scrollspy-button="events">
-                  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0a6.5 6.5 0 0 0-13 0Zm4.879-2.773l4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z"/>
-                  </svg>
-                  Eventos
-                </a>
+                <div style="display: flex; gap: var(--darkui-spacing-4); justify-content: center; flex-wrap: wrap; margin-bottom: var(--darkui-spacing-8);">
+                    <a href="#installation" class="button button-primary button-lg">
+                        Comenzar
+                    </a>
+                    <a href="https://github.com/soyleninjs/hequalizer" target="_blank" rel="noopener noreferrer" class="button button-secondary button-lg">
+                        Ver en GitHub
+                    </a>
+                </div>
 
-              </div>
+                <div style="display: flex; gap: var(--darkui-spacing-3); justify-content: center; flex-wrap: wrap;">
+                    <img src="https://img.shields.io/npm/v/hequalizer.svg" alt="npm version" style="height: 20px;">
+                    <img src="https://img.shields.io/github/license/soyleninjs/hequalizer" alt="license" style="height: 20px;">
+                    <img src="https://img.shields.io/bundlephobia/minzip/hequalizer.svg" alt="bundle size" style="height: 20px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section style="padding: var(--darkui-spacing-12) 0; background: var(--darkui-bg-primary);">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">~2KB</div>
+                    <div style="color: var(--darkui-text-secondary);">Tamaño minificado</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Zero</div>
+                    <div style="color: var(--darkui-text-secondary);">Dependencias</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Auto</div>
+                    <div style="color: var(--darkui-text-secondary);">Recalculación</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div style="color: var(--darkui-text-secondary);">Vanilla JS</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" style="padding: var(--darkui-spacing-12) 0; background: var(--darkui-bg-secondary);">
+        <div class="container">
+            <div style="text-align: center; max-width: 800px; margin: 0 auto var(--darkui-spacing-10);">
+                <h2 class="heading-2" style="margin-bottom: var(--darkui-spacing-4);">
+                    Características principales
+                </h2>
+                <p class="text-lg" style="color: var(--darkui-text-secondary);">
+                    Todo lo que necesitas para igualar alturas de forma automática y eficiente
+                </p>
             </div>
 
-            <div class="side-wrapper">
-              <div class="side-title">Demos</div>
-              <div class="side-menu">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="heading-5" style="margin-bottom: var(--darkui-spacing-3);">Igualación Automática</h3>
+                    <p style="color: var(--darkui-text-secondary);">
+                        Calcula y aplica la altura máxima mediante variables CSS personalizables sin intervención manual.
+                    </p>
+                </div>
 
-                <a class="side-menu-button" href="#" data-scrollspy-button="demo-carousel">
-                  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                    <path d="M22 26H10a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2zM10 8v16h12V8zM4 24H0v-2h4V10H0V8h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2zm28 0h-4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h4v2h-4v12h4z"/>
-                  </svg>
-                  Carousel
-                </a>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="heading-5" style="margin-bottom: var(--darkui-spacing-3);">Sistema Responsive</h3>
+                    <p style="color: var(--darkui-text-secondary);">
+                        Breakpoints configurables con opciones específicas por viewport para control total en cada dispositivo.
+                    </p>
+                </div>
 
-                <a class="side-menu-button" href="#" data-scrollspy-button="demo-grid-responsive">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                    <path d="M5 3h13a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3m0 1a2 2 0 0 0-2 2v3h5V4H5M3 19a2 2 0 0 0 2 2h3v-5H3v3m5-9H3v5h5v-5m10 11a2 2 0 0 0 2-2v-3h-5v5h3m2-11h-5v5h5v-5m0-4a2 2 0 0 0-2-2h-3v5h5V6M9 4v5h5V4H9m0 17h5v-5H9v5m5-11H9v5h5v-5Z"/>
-                  </svg>
-                  Grid
-                </a>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="heading-5" style="margin-bottom: var(--darkui-spacing-3);">Actualización Automática</h3>
+                    <p style="color: var(--darkui-text-secondary);">
+                        MutationObserver y eventos de resize mantienen las alturas sincronizadas automáticamente.
+                    </p>
+                </div>
 
-              </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="heading-5" style="margin-bottom: var(--darkui-spacing-3);">Modos de Columnas</h3>
+                    <p style="color: var(--darkui-text-secondary);">
+                        Iguala todos los elementos o agrúpalos por número de columnas según tus necesidades de layout.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="heading-5" style="margin-bottom: var(--darkui-spacing-3);">Lifecycle Hooks</h3>
+                    <p style="color: var(--darkui-text-secondary);">
+                        Eventos en cada etapa del ciclo de vida para debugging y control avanzado de la funcionalidad.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="heading-5" style="margin-bottom: var(--darkui-spacing-3);">Framework Agnostic</h3>
+                    <p style="color: var(--darkui-text-secondary);">
+                        Compatible con React, Vue, Angular, Svelte y cualquier framework moderno o vanilla JS.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section id="installation" style="padding: var(--darkui-spacing-12) 0; background: var(--darkui-bg-primary);">
+        <div class="container">
+            <h2 class="heading-2" style="margin-bottom: var(--darkui-spacing-6);">Instalación</h2>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4);">NPM</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>Terminal</span>
+                </div>
+                <pre><code class="language-bash">npm install hequalizer</code></pre>
             </div>
 
-          </div>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>JavaScript</span>
+                </div>
+                <pre><code class="language-javascript">// ES modules
+import Hequalizer from 'hequalizer';
+
+// CommonJS
+const Hequalizer = require('hequalizer');</code></pre>
+            </div>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-8);">CDN</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>HTML</span>
+                </div>
+                <pre><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/npm/hequalizer@1.0.0/hequalizer.min.js"&gt;&lt;/script&gt;</code></pre>
+            </div>
         </div>
+    </section>
 
-        <!-- Cnotent -->
-        <div class="layout-center-side">
+    <!-- Usage Section -->
+    <section id="usage" style="padding: var(--darkui-spacing-12) 0; background: var(--darkui-bg-secondary);">
+        <div class="container">
+            <h2 class="heading-2" style="margin-bottom: var(--darkui-spacing-6);">Uso Básico</h2>
 
-          <div class="main-sections">
-            <!-- Info -->
-            <section class="section-container block-intro" data-scrollspy-section="intro">
-              <div class="section-header">
-                <h2 class="section-title">Hequalizer</h2>
-              </div>
-              <div class="section-content">
-                <p class="text">Script para calcular la altura máxima entre un conjunto de elementos.</p>
-                <br>
-                <p class="text">El objetivo de este script es comparar la altura de un conjunto de elementos/nodos en el DOM y obtener la altura que sea mayor, regresando ese valor en forma de variable CSS a cada uno de los elementos/nodos, con el fin de poder lograr una alineación horizontal perfecta (por ejemplo, muchos elementos en un slider, o un grid).</p>
-              </div>
-            </section>
-
-            <!-- Instalacion -->
-            <section class="section-container block-config" data-scrollspy-section="installation">
-              <div class="section-header">
-                <h2 class="section-title">Instalacion</h2>
-                <p class="text"><strong>Hequalizer</strong> está disponible en NPM con el nombre de <strong>hequalizer</strong>, se puede instalar con Yarn o NPM:</p>
-              </div>
-
-              <div class="section-content">
-                <pre>
-                  <code class="language-bash">
-                    yarn add hequalizer
-                  </code>
-                </pre>
-
-                <pre>
-                  <code class="language-js">
-                    npm i hequalizer
-                  </code>
-                </pre>
-
-                <p class="text">Solo se necesita hacer <strong>import</strong> del modulo y crear una instancia:</p>
-
-                <pre>
-                  <code class="language-js">
-                    import Hequalizer from "hequalizer";
-
-                    const hequalizer = new Hequalizer(...);
-                  </code>
-                </pre>
-              </div>
-            </section>
-
-            <!-- Inicializacion -->
-            <section class="section-container block-config" data-scrollspy-section="initialization">
-              <div class="section-header">
-                <h2 class="section-title">Inicializar Hequalizer</h2>
-                <p class="text">Configuración y propiedades predeterminadas para iniciar el plugin:</p>
-                <p class="text-small">No necesita una configuracion determinada en html, solo necesita capturar un array de elementos y pasarlo a la configuracion del plugin. El siguiente ejemplo son las configuraciones predeterminadas, si opta por no pasar ninguna configuracion adicional, solo puede pasar un objeto vacio y las opciones predeterminadas son las que se tomaran.</p>
-              </div>
-
-              <div class="section-content">
-                <pre>
-                  <code class="language-js">
-                    import Hequalizer from "hequalizer";
-
-                    const $elements = document.querySelectorAll(".titles");
-
-                    const hequalizer = new Hequalizer($elements, {
-                      cssVariable: '--height',
-                      columns: "all",
-                      initialIndex: 0,
-                      resizeObserver: true,
-                      classElementToOmit: '',
-                      on: {
-                        init: (data, instance) => {},
-                        afterResize: (data, instance) => {},
-                        afterChanges: (data, instance) => {},
-                        afterUpdate: (data, instance) => {},
-                        afterDestroy: (instance) => {},
-                      },
-                      responsive: {}
-                    });
-                  </code>
-                </pre>
-              </div>
-            </section>
-
-            <!-- Parametros -->
-            <section class="section-container block-params" data-scrollspy-section="parameters">
-              <div class="section-header">
-                <h2 class="section-title">Parámetros</h2>
-                <p class="text">Lista de todas las parámetros que se pueden configurar:</p>
-              </div>
-              <div class="section-content">
-                <pre>
-                  <code class="language-js">
-                    const hequalizer = new Hequalizer($elements, options);
-                  </code>
-                </pre>
-
-                <h3 class="section-small-title">Parámetros</h3>
-                <div class="table-wrapper">
-                  <div class="table">
-
-                    <div class="table-row table-row-header table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text">Nombre</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text">Tipo</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text">Descripción</span>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text propertie-color">$elements</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text type-color">Array</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Array de todos los elementos para revisar su altura.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const $elements = document.querySelectorAll(".titles");
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text propertie-color">options</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text type-color">Object</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Objeto con todas las opciones posibles. Cada que agregues una opción esta sobrescribe la default.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              cssVariable: "--height",
-                              ...
-                            };
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                  </div>
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4);">HTML</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>index.html</span>
                 </div>
+                <pre><code class="language-html">&lt;div class="card-container"&gt;
+  &lt;div class="card"&gt;
+    &lt;h3&gt;Título 1&lt;/h3&gt;
+    &lt;p&gt;Contenido variable...&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="card"&gt;
+    &lt;h3&gt;Título 2&lt;/h3&gt;
+    &lt;p&gt;Contenido con diferente altura...&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="card"&gt;
+    &lt;h3&gt;Título 3&lt;/h3&gt;
+    &lt;p&gt;Más contenido...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
 
-                <h3 class="section-small-title">Opciones</h3>
-                <div class="table-wrapper">
-                  <div class="table">
-
-                    <div class="table-row table-row-header table-params-row">
-                      <div class="table-column">
-                        <span class="table-column-text">Nombre</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text">Tipo</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text">Default</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text">Descripción</span>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-params-row">
-                      <div class="table-column">
-                        <span class="table-column-text propertie-color">cssVariable</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text type-color">String</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">"--height"</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Este campo sirve para colocar la variable la cual tendrá el valor del cálculo de todas las alturas de entre todos los elementos del array. Esta variable se coloca en todos los elementos examinados.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              cssVariable: "--height",
-                            };
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-params-row">
-                      <div class="table-column">
-                        <span class="table-column-text propertie-color">columns</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text type-color">Number / String</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">"all"</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Con este campo se indica el numero de elementos (columnas) por fila en los que se realizarán los calculos, es decir, cada fila tendra cálculos independientes.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              columns: 3,
-                            };
-                          </code>
-                        </pre>
-
-                        <p class="table-column-text">
-                          Si contamos que los elementos a calcular se encuentran en una lista horizontal continua (una sola fila) se puede usar <span class="string-color">"all"</span> para que calcule todos los elementos independientemente de cuantos hay en total.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              columns: "all",
-                            };
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-params-row">
-                      <div class="table-column">
-                        <span class="table-column-text propertie-color">initialIndex</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text type-color">Number</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text number-color">0</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Este campo ayuda a que el script inicie en determinada posición del array, es decir, que inicie a partir de determinado index, así evitando configurar elementos que estén por detrás de esta posición inicial.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              initialIndex: 0,
-                            };
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-params-row">
-                      <div class="table-column">
-                        <span class="table-column-text propertie-color">resizeObserver</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text type-color">Boolean</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text boolean-color">true</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Con este campo se puede manipular si se actualizaran los cambios con el resize de la ventana. Si coloca el valor en <span class="boolean-color">false</span>, hara que ya no se actualizen los calculos al momento de hacer resize a la ventana.
-                        </p>
-                        
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              resizeObserver: true,
-                            };
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-params-row">
-                      <div class="table-column">
-                        <span class="table-column-text propertie-color">classElementToOmit</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text type-color">Number</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">" "</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Este parámetro recibe el nombre de la clase que comparten los elementos en el array, es decir, esta clase se usa para saltar aquel elemento que contenga esta clase, así se omite y no es contemplado para checar su altura.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              classElementToOmit: " ",
-                            };
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-params-row">
-                      <div class="table-column">
-                        <span class="table-column-text propertie-color">on</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text type-color">Object</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text boolean-color">{}</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Dentro de este objeto encontraremos los eventos que existen durante la vida de la instancia.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              on: {
-                                init: (data, instance) => {},
-                                afterResize: (data, instance) => {},
-                                afterChanges: (data, instance) => {},
-                                afterUpdate: (data, instance) => {},
-                                afterDestroy: (instance) => {},
-                              },
-                            };
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-params-row">
-                      <div class="table-column">
-                        <span class="table-column-text propertie-color">responsive</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text type-color">Object</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text boolean-color">{}</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Propiedad para configuraciones en responsive, pasamos el breakpoint como <span class="string-color">"key"</span> y le asignamos un objeto con las propiedades a cambiar. El funcionamiento del responsive es con base a "DesktopFirst".
-                          <br>
-                          Solo se pueden actualizar las siguientes propiedades:
-                          <br>
-                          - <span class="string-color">cssVariable</span>
-                          <br>
-                          - <span class="string-color">columns</span>
-                          <br>
-                          - <span class="string-color">initialIndex</span>
-                          <br>
-                          - <span class="string-color">resizeObserver</span>
-                          <br>
-                          - <span class="string-color">classElementToOmit</span>
-                          <br>
-                          - <span class="string-color">on</span>
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              responsive: {
-                                // window.innerWidth <= 834
-                                834: {
-                                  columns: 3,
-                                },
-                                // window.innerWidth <= 680
-                                680: {
-                                  columns: 2,
-                                },
-                                // window.innerWidth <= 500
-                                500: {
-                                  columns: 1,
-                                  resizeObserver: false,
-                                }
-                              }
-                            };
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                  </div>
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-8);">JavaScript</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>app.js</span>
                 </div>
-              </div>
-            </section>
+                <pre><code class="language-javascript">// Seleccionar los títulos de las tarjetas
+const cardTitles = document.querySelectorAll('.card h3');
 
-            <!-- Metodos -->
-            <section class="section-container block-methods" data-scrollspy-section="methods">
-              <div class="section-header">
-                <h2 class="section-title">Métodos</h2>
-                <p class="text">Lista de todos las métodos disponibles en la vida de la instancia:</p>
-              </div>
-              <div class="section-content">
-                <div class="table-wrapper">
-                  <div class="table table-methods">
+// Inicializar Hequalizer
+new Hequalizer(cardTitles);</code></pre>
+            </div>
 
-                    <div class="table-row table-row-header table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text">Nombre</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text">Parámentros</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text">Descripción</span>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text function-color">init</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">()</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Inicializa la configuración de manera manual. (este método puede usarse si anteriormente se usó el método <span class="function-color">destroy</span>())
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const hequalizer = new Hequalizer($elements, {})
-
-                            hequalizer.init()
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text function-color">destroy</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">
-                          (<span class="boolean-color">boolean</span>)
-                        </span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Remueve la configuración hecha por el plugin, remueve las variables css y cancela los eventos enlazados a los elementos. Si pasamos <span class="boolean-color">true</span> como parametro, la instancia se destruira del registro y ya no se tendra acceso a ella ni a sus métodos.
-                        </p>
-
-                        <p class="table-column-text">
-                          Valor predeterminado <span class="boolean-color">false</span>.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const hequalizer = new Hequalizer($elements, {})
-
-                            hequalizer.destroy(false)
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text function-color">update</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">()</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Actualiza de manera manual la configuración, esto hará que el evento de <span class="function-color">afterUpdate</span>() se ejecute.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const hequalizer = new Hequalizer($elements, {})
-
-                            hequalizer.update()
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                  </div>
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-8);">CSS</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>styles.css</span>
                 </div>
-              </div>
-            </section>
+                <pre><code class="language-css">/* La variable CSS --height se aplica automáticamente */
+.card h3 {
+  height: var(--height);
+}</code></pre>
+            </div>
 
-            <!-- Eventos -->
-            <section class="section-container block-events" data-scrollspy-section="events">
-              <div class="section-header">
-                <h2 class="section-title">Eventos</h2>
-                <p class="text">Eventos disponibles a los que podemos acceder mediante los parametros:</p>
-              </div>
-
-              <div class="section-content">
-                <pre>
-                  <code class="language-js">
-                    const hequalizer = new Hequalizer($elementsElements, {
-                      // ...
-                      on: {
-                        init: (data, instance) => {},
-                        afterResize: (data, instance) => {},
-                        afterChanges: (data, instance) => {},
-                        afterUpdate: (data, instance) => {},
-                        afterDestroy: (instance) => {},
-                      },
-                    });
-                  </code>
-                </pre>
-              </div>
-
-              <div class="section-content">
-                <div class="table-wrapper">
-                  <div class="table table-events">
-
-                    <div class="table-row table-row-header table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text">Nombre</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text">Parámentros</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text">Descripción</span>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text function-color">init</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">(data, instance)</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Evento lanzado cada vez que se inicia la instancia.
-                        </p>
-
-                        <p class="table-column-text">
-                          Los parámetros retornan los valores configurados y el objeto de la instancia.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              // ...
-                              on: {
-                                init: (data, instance) => {
-                                  console.log(data, instance);
-                                },
-                              };
-                            })
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text function-color">afterResize</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">(data, instance)</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Evento lanzado después de cada resize.
-                        </p>
-
-                        <p class="table-column-text">
-                          Los parámetros retornan los valores configurados y el objeto de la instancia.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              // ...
-                              on: {
-                                afterResize: (data, instance) => {
-                                  console.log(data, instance);
-                                },
-                              };
-                            })
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text function-color">afterChanges</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">(data, instance)</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Evento lanzado después de un cambio en el DOM sobre los elementos del array.
-                        </p>
-
-                        <p class="table-column-text">
-                          Los parámetros retornan los valores configurados y el objeto de la instancia.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              // ...
-                              on: {
-                                afterChanges: (data, instance) => {
-                                  console.log(data, instance);
-                                },
-                              };
-                            })
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text function-color">afterUpdate</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">(data, instance)</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Evento lanzado después de ejecutar el método <span class="function-color">update</span>() de la instancia.
-                        </p>
-
-                        <p class="table-column-text">
-                          Los parámetros retornan los valores configurados y el objeto de la instancia.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              // ...
-                              on: {
-                                afterUpdate: (data, instance) => {
-                                  console.log(data, instance);
-                                },
-                              };
-                            })
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                    <div class="table-row table-3-columns-row">
-                      <div class="table-column">
-                        <span class="table-column-text function-color">afterDestroy</span>
-                      </div>
-                      <div class="table-column">
-                        <span class="table-column-text string-color">(instance)</span>
-                      </div>
-                      <div class="table-column">
-                        <p class="table-column-text">
-                          Evento lanzado después de ejecutar el método <span class="function-color">destroy</span>() de la instancia.
-                        </p>
-
-                        <p class="table-column-text">
-                          El parámetro retorna el objeto de la instancia.
-                        </p>
-
-                        <pre>
-                          <code class="language-js">
-                            const options = {
-                              // ...
-                              on: {
-                                afterDestroy: (data, instance) => {
-                                  console.log(data, instance);
-                                },
-                              };
-                            })
-                          </code>
-                        </pre>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <!-- Carousel -->
-            <section class="section-container" data-scrollspy-section="demo-carousel">
-              <div class="section-header">
-                <h2 class="section-title">Carousel</h2>
-                <p class="text">Contenido en formato de Slider/Carousel, donde todos los elementos están en una sola fila</p>
-              </div>
-              <div class="section-content">
-                <div class="swiper">
-                  <div class="swiper-wrapper items items-carousel" data-carousel></div>
-                  <div class="swiper-button-prev"></div>
-                  <div class="swiper-button-next"></div>
-                </div>
-              </div>
-              <div class="section-footer">
-                <h3 class="section-small-title">Código</h3>
-
-                <pre class="section-code-example">
-                  <code class="language-js">
-                    const options = {
-                      columns: "all",
-                    };
-
-                    const $titles = document.querySelectorAll(".item-card-info-title");
-                    new Hequalizer($titles, options);
-                  </code>
-                </pre>
-              </div>
-            </section>
-
-            <!-- Grid -->
-            <section class="section-container" data-scrollspy-section="demo-grid-responsive">
-              <div class="section-header">
-                <h2 class="section-title">Grid</h2>
-                <p class="text">Contenido en formato de grid con configuraciones adicionales para el responsive</p>
-              </div>
-              <div class="section-content">
-                <div class="items items-grid" data-grid-responsive></div>
-              </div>
-              <div class="section-footer">
-                <h3 class="section-small-title">Código</h3>
-                
-                <pre class="section-code-example">
-                  <code class="language-js">
-                    const gridOptions = {
-                      columns: 5,
-                      responsive: {
-                        1440: {
-                          columns: 4,
-                        },
-                        834: {
-                          columns: 3,
-                        },
-                        680: {
-                          columns: 2,
-                        },
-                        500: {
-                          columns: 1,
-                          resizeObserver: false, // Esto evita recalcular la altura en el resize
-                        }
-                      }
-                    };
-
-                    const $titles = document.querySelectorAll(".item-card-info-title");
-                    new Hequalizer($titles, gridOptions);
-                  </code>
-                </pre>
-              </div>
-            </section>
-          </div>
-          
+            <div style="background: var(--darkui-bg-tertiary); padding: var(--darkui-spacing-4); border-radius: var(--darkui-radius-md); border-left: 4px solid var(--darkui-color-primary); margin-top: var(--darkui-spacing-6);">
+                <div style="font-weight: var(--darkui-font-weight-semibold); margin-bottom: var(--darkui-spacing-2);">Hequalizer recalcula las alturas cuando:</div>
+                <ul style="margin: 0; padding-left: var(--darkui-spacing-6);">
+                    <li>El DOM esté completamente cargado (DOMContentLoaded)</li>
+                    <li>El contenido cambie (mediante MutationObserver)</li>
+                    <li>La ventana cambie de tamaño (resize event)</li>
+                </ul>
+            </div>
         </div>
-      </div>
+    </section>
 
-    </main>
+    <!-- Configuration Section -->
+    <section id="configuration" style="padding: var(--darkui-spacing-12) 0; background: var(--darkui-bg-primary);">
+        <div class="container">
+            <h2 class="heading-2" style="margin-bottom: var(--darkui-spacing-6);">Configuración</h2>
 
-    <footer class="main-footer">
-      <p class="text text-center">
-        <strong>
-          Hequalizer by <a href="https://github.com/soyleninjs" target="_blank">@soyleninjs</a>
-        </strong>
-      </p>
+            <div class="code-example" style="margin-bottom: var(--darkui-spacing-8);">
+                <div class="code-example-header">
+                    <span>Sintaxis</span>
+                </div>
+                <pre><code class="language-javascript">new Hequalizer(elements, options)</code></pre>
+            </div>
+
+            <table class="options-table">
+                <thead>
+                    <tr>
+                        <th>Opción</th>
+                        <th>Tipo</th>
+                        <th>Default</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>cssVariable</code></td>
+                        <td>String</td>
+                        <td><code>'--height'</code></td>
+                        <td>Nombre de la variable CSS</td>
+                    </tr>
+                    <tr>
+                        <td><code>columns</code></td>
+                        <td>String | Number</td>
+                        <td><code>'all'</code></td>
+                        <td>Modo de columnas: "all" o número</td>
+                    </tr>
+                    <tr>
+                        <td><code>initialIndex</code></td>
+                        <td>Number</td>
+                        <td><code>0</code></td>
+                        <td>Índice desde donde iniciar</td>
+                    </tr>
+                    <tr>
+                        <td><code>resizeObserver</code></td>
+                        <td>Boolean</td>
+                        <td><code>true</code></td>
+                        <td>Activar MutationObserver</td>
+                    </tr>
+                    <tr>
+                        <td><code>classElementToOmit</code></td>
+                        <td>String</td>
+                        <td><code>''</code></td>
+                        <td>Clase para omitir elementos</td>
+                    </tr>
+                    <tr>
+                        <td><code>on</code></td>
+                        <td>Object</td>
+                        <td><code>{}</code></td>
+                        <td>Lifecycle hooks</td>
+                    </tr>
+                    <tr>
+                        <td><code>responsive</code></td>
+                        <td>Object</td>
+                        <td><code>{}</code></td>
+                        <td>Breakpoints responsive</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- API Section -->
+    <section id="api" style="padding: var(--darkui-spacing-12) 0; background: var(--darkui-bg-secondary);">
+        <div class="container">
+            <h2 class="heading-2" style="margin-bottom: var(--darkui-spacing-6);">API</h2>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4);">Métodos de Instancia</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>JavaScript</span>
+                </div>
+                <pre><code class="language-javascript">const instance = new Hequalizer(elements);
+
+// Actualizar manualmente
+instance.update();
+
+// Reinicializar
+instance.init();
+
+// Destruir (mantener en registro)
+instance.destroy();
+
+// Destruir y remover del registro
+instance.destroy(true);</code></pre>
+            </div>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-8);">Propiedades de Instancia</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>JavaScript</span>
+                </div>
+                <pre><code class="language-javascript">instance.id               // ID único generado
+instance.elementsArray    // Elementos originales
+instance.values           // Altura(s) calculada(s)
+instance.actualOptions    // Opciones aplicadas
+instance.actualBreakpoint // Breakpoint actual</code></pre>
+            </div>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-8);">API Global</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>JavaScript</span>
+                </div>
+                <pre><code class="language-javascript">// Acceder a todas las instancias
+window.HequalizerAPI.Instances
+
+// Crear instancia
+window.HequalizerAPI.Init(elements, options)
+
+// Remover instancia
+window.HequalizerAPI.removeInstance(id)</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Responsive Section -->
+    <section id="responsive" style="padding: var(--darkui-spacing-12) 0; background: var(--darkui-bg-primary);">
+        <div class="container">
+            <h2 class="heading-2" style="margin-bottom: var(--darkui-spacing-6);">Sistema Responsive</h2>
+
+            <p class="text-lg" style="color: var(--darkui-text-secondary); margin-bottom: var(--darkui-spacing-8);">
+                Hequalizer incluye un sistema responsive completo que permite configurar diferentes opciones según el viewport. Cada breakpoint puede sobrescribir cualquiera de las opciones base.
+            </p>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4);">Cómo Funciona</h3>
+            <div style="background: var(--darkui-bg-secondary); padding: var(--darkui-spacing-4); border-radius: var(--darkui-radius-md); margin-bottom: var(--darkui-spacing-6);">
+                <ul style="margin: 0; padding-left: var(--darkui-spacing-6); color: var(--darkui-text-secondary);">
+                    <li><strong style="color: var(--darkui-text-primary);">Evaluación por viewport:</strong> Los breakpoints se evalúan con <code style="background: var(--darkui-bg-tertiary); padding: 0.125rem 0.375rem; border-radius: var(--darkui-radius-sm); color: var(--darkui-color-primary);">window.innerWidth ≤ breakpoint</code></li>
+                    <li><strong style="color: var(--darkui-text-primary);">Orden automático:</strong> Los breakpoints se ordenan de menor a mayor automáticamente</li>
+                    <li><strong style="color: var(--darkui-text-primary);">Configuración base:</strong> Si el viewport no coincide con ningún breakpoint, se usa la configuración base</li>
+                    <li><strong style="color: var(--darkui-text-primary);">Fusión de opciones:</strong> Las opciones del breakpoint activo se fusionan con las opciones base</li>
+                    <li><strong style="color: var(--darkui-text-primary);">Recalculación automática:</strong> Al cambiar de breakpoint, las alturas se recalculan automáticamente</li>
+                </ul>
+            </div>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4);">Propiedades Configurables por Breakpoint</h3>
+            <p style="color: var(--darkui-text-secondary); margin-bottom: var(--darkui-spacing-4);">
+                Todas las opciones disponibles pueden ser sobrescritas en cada breakpoint:
+            </p>
+
+            <table class="options-table" style="margin-bottom: var(--darkui-spacing-8);">
+                <thead>
+                    <tr>
+                        <th>Propiedad</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Uso Responsive</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>cssVariable</code></td>
+                        <td>String</td>
+                        <td>Nombre de la variable CSS</td>
+                        <td>Útil para usar diferentes variables por dispositivo</td>
+                    </tr>
+                    <tr>
+                        <td><code>columns</code></td>
+                        <td>String | Number</td>
+                        <td>Modo de columnas</td>
+                        <td>Cambia el número de columnas según el viewport (ej: 4 desktop, 2 tablet, 1 mobile)</td>
+                    </tr>
+                    <tr>
+                        <td><code>initialIndex</code></td>
+                        <td>Number</td>
+                        <td>Índice desde donde iniciar</td>
+                        <td>Permite omitir elementos iniciales solo en ciertos viewports</td>
+                    </tr>
+                    <tr>
+                        <td><code>resizeObserver</code></td>
+                        <td>Boolean</td>
+                        <td>Activar MutationObserver</td>
+                        <td>Mejora performance desactivándolo en móvil: <code>resizeObserver: false</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>classElementToOmit</code></td>
+                        <td>String</td>
+                        <td>Clase para omitir elementos</td>
+                        <td>Permite omitir diferentes elementos según el dispositivo</td>
+                    </tr>
+                    <tr>
+                        <td><code>on</code></td>
+                        <td>Object</td>
+                        <td>Lifecycle hooks</td>
+                        <td>Ejecuta lógica específica por breakpoint usando <code>instance.actualBreakpoint</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4);">Ejemplo Básico</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>JavaScript</span>
+                </div>
+                <pre><code class="language-javascript">new Hequalizer(elements, {
+  // Configuración base (desktop > 1024px)
+  columns: 3,
+  cssVariable: '--desktop-height',
+
+  responsive: {
+    // Tablet (≤ 1024px)
+    1024: {
+      columns: 2,
+      cssVariable: '--tablet-height'
+    },
+    // Mobile (≤ 768px)
+    768: {
+      columns: 1,
+      cssVariable: '--mobile-height',
+      resizeObserver: false // Mejora performance en móvil
+    }
+  }
+});</code></pre>
+            </div>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-8);">Ejemplo Avanzado con Todas las Propiedades</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>JavaScript</span>
+                </div>
+                <pre><code class="language-javascript">new Hequalizer(elements, {
+  // Configuración base (desktop)
+  cssVariable: '--height-desktop',
+  columns: 4,
+  initialIndex: 0,
+  resizeObserver: true,
+  classElementToOmit: '',
+
+  on: {
+    afterResize: ({rows, instance}) => {
+      console.log('Breakpoint:', instance.actualBreakpoint);
+      console.log('Columnas activas:', instance.actualOptions.columns);
+    }
+  },
+
+  responsive: {
+    // Large Tablet (≤ 1280px)
+    1280: {
+      columns: 3,
+      cssVariable: '--height-lg-tablet'
+    },
+
+    // Tablet (≤ 1024px)
+    1024: {
+      columns: 2,
+      cssVariable: '--height-tablet',
+      initialIndex: 1 // Omite el primer elemento en tablet
+    },
+
+    // Mobile Landscape (≤ 768px)
+    768: {
+      columns: 2,
+      cssVariable: '--height-mobile-landscape',
+      classElementToOmit: 'hide-mobile' // Omite elementos con esta clase
+    },
+
+    // Mobile Portrait (≤ 480px)
+    480: {
+      columns: 1,
+      cssVariable: '--height-mobile',
+      resizeObserver: false, // Mejor performance
+      initialIndex: 0,
+      classElementToOmit: 'hide-mobile'
+    }
+  }
+});</code></pre>
+            </div>
+
+            <div style="background: var(--darkui-bg-tertiary); padding: var(--darkui-spacing-4); border-radius: var(--darkui-radius-md); border-left: 4px solid var(--darkui-color-primary); margin-top: var(--darkui-spacing-6);">
+                <div style="font-weight: var(--darkui-font-weight-semibold); margin-bottom: var(--darkui-spacing-2);">Importante:</div>
+                <ul style="margin: 0; padding-left: var(--darkui-spacing-6);">
+                    <li>Los breakpoints se evalúan con <code style="background: var(--darkui-bg-elevated); padding: 0.125rem 0.375rem; border-radius: var(--darkui-radius-sm);">≤</code> (menor o igual)</li>
+                    <li>Se ordenan automáticamente de menor a mayor</li>
+                    <li>Si no coincide ninguno, se usa la configuración base</li>
+                    <li>Puedes acceder al breakpoint actual con <code style="background: var(--darkui-bg-elevated); padding: 0.125rem 0.375rem; border-radius: var(--darkui-radius-sm);">instance.actualBreakpoint</code></li>
+                    <li>Puedes acceder a las opciones aplicadas con <code style="background: var(--darkui-bg-elevated); padding: 0.125rem 0.375rem; border-radius: var(--darkui-radius-sm);">instance.actualOptions</code></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples Section -->
+    <section id="examples" style="padding: var(--darkui-spacing-12) 0; background: var(--darkui-bg-secondary);">
+        <div class="container">
+            <h2 class="heading-2" style="margin-bottom: var(--darkui-spacing-6);">Ejemplos</h2>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4);">Grid Responsive</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>JavaScript</span>
+                </div>
+                <pre><code class="language-javascript">const gridItems = document.querySelectorAll('.grid-item');
+
+new Hequalizer(gridItems, {
+  columns: 3,
+  responsive: {
+    1024: { columns: 2 },
+    768: { columns: 1 }
+  }
+});</code></pre>
+            </div>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-8);">Lifecycle Hooks</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>JavaScript</span>
+                </div>
+                <pre><code class="language-javascript">const cards = document.querySelectorAll('.card');
+
+new Hequalizer(cards, {
+  on: {
+    init: ({rows, instance}) => {
+      console.log(`Altura inicial: ${rows}px`);
+    },
+    afterResize: ({rows, instance}) => {
+      console.log(`Nueva altura: ${rows}px`);
+    },
+    afterChanges: ({rows, instance}) => {
+      console.log('Contenido cambió, nueva altura:', rows);
+    }
+  }
+});</code></pre>
+            </div>
+
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-8);">Omitir Elementos</h3>
+            <div class="code-example">
+                <div class="code-example-header">
+                    <span>JavaScript</span>
+                </div>
+                <pre><code class="language-javascript">const items = document.querySelectorAll('.item');
+
+new Hequalizer(items, {
+  classElementToOmit: 'skip-height'
+});</code></pre>
+            </div>
+
+            <!-- Interactive Demos -->
+            <h3 class="heading-4" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-12);">Demos Interactivos</h3>
+
+            <!-- Demo 1: Grid -->
+            <h4 class="heading-5" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-6);">Demo 1: Grid Responsive</h4>
+            <p style="color: var(--darkui-text-secondary); margin-bottom: var(--darkui-spacing-4);">
+                Grid de tarjetas con contenido variable. Los títulos se igualan automáticamente a la altura del más largo.
+            </p>
+
+            <div style="background: var(--darkui-bg-primary); padding: var(--darkui-spacing-6); border-radius: var(--darkui-radius-lg); border: 1px solid var(--darkui-border-primary); margin-bottom: var(--darkui-spacing-6);">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--darkui-spacing-4);" id="grid-demo">
+                    <!-- Las tarjetas se generarán dinámicamente aquí -->
+                </div>
+            </div>
+
+            <!-- Demo 2: Carousel -->
+            <h4 class="heading-5" style="margin-bottom: var(--darkui-spacing-4); margin-top: var(--darkui-spacing-8);">Demo 2: Carousel con Scroll Horizontal</h4>
+            <p style="color: var(--darkui-text-secondary); margin-bottom: var(--darkui-spacing-4);">
+                Carousel horizontal con desplazamiento. Todas las descripciones tienen la misma altura para mantener el diseño consistente.
+            </p>
+
+            <div style="background: var(--darkui-bg-primary); padding: var(--darkui-spacing-6); border-radius: var(--darkui-radius-lg); border: 1px solid var(--darkui-border-primary); margin-bottom: var(--darkui-spacing-6);">
+                <div style="display: flex; gap: var(--darkui-spacing-4); overflow-x: auto; padding-bottom: var(--darkui-spacing-4); scroll-snap-type: x mandatory;" id="carousel-demo">
+                    <!-- Las tarjetas del carousel se generarán dinámicamente aquí -->
+                </div>
+            </div>
+
+            <div style="margin-top: var(--darkui-spacing-6);">
+                <p style="color: var(--darkui-text-secondary); font-size: var(--darkui-font-size-sm); margin-bottom: var(--darkui-spacing-3);">
+                    Código de los demos:
+                </p>
+                <div class="code-example">
+                    <div class="code-example-header">
+                        <span>JavaScript - Grid Demo</span>
+                    </div>
+                    <pre><code class="language-javascript">// Grid: Igualar títulos
+const gridTitles = document.querySelectorAll('.grid-card-title');
+new Hequalizer(gridTitles, {
+  on: {
+    init: ({rows, instance}) => {
+      console.log(`Grid altura: ${rows}px`);
+    }
+  }
+});</code></pre>
+                </div>
+                <div class="code-example" style="margin-top: var(--darkui-spacing-4);">
+                    <div class="code-example-header">
+                        <span>JavaScript - Carousel Demo</span>
+                    </div>
+                    <pre><code class="language-javascript">// Carousel: Igualar descripciones
+const carouselDescs = document.querySelectorAll('.carousel-card-desc');
+new Hequalizer(carouselDescs, {
+  on: {
+    init: ({rows, instance}) => {
+      console.log(`Carousel altura: ${rows}px`);
+    }
+  }
+});</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="padding: var(--darkui-spacing-12) 0; background: var(--darkui-bg-primary); border-top: 1px solid var(--darkui-border-primary);">
+        <div class="container">
+            <div style="text-align: center;">
+                <p style="color: var(--darkui-text-secondary); margin-bottom: var(--darkui-spacing-4);">
+                    Hecho con ❤️ por <a href="https://github.com/soyleninjs" target="_blank" rel="noopener noreferrer" style="color: var(--darkui-color-primary); text-decoration: none;">@soyleninjs</a>
+                </p>
+                <div style="display: flex; gap: var(--darkui-spacing-6); justify-content: center; flex-wrap: wrap;">
+                    <a href="https://github.com/soyleninjs/hequalizer" target="_blank" rel="noopener noreferrer" style="color: var(--darkui-text-secondary); text-decoration: none; transition: color var(--darkui-transition-fast);">GitHub</a>
+                    <a href="https://www.npmjs.com/package/hequalizer" target="_blank" rel="noopener noreferrer" style="color: var(--darkui-text-secondary); text-decoration: none; transition: color var(--darkui-transition-fast);">NPM</a>
+                    <a href="https://github.com/soyleninjs/hequalizer/blob/master/LICENSE" target="_blank" rel="noopener noreferrer" style="color: var(--darkui-text-secondary); text-decoration: none; transition: color var(--darkui-transition-fast);">MIT License</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
-  </div>
-
-  <!-- Templates -->
-  <template id="template-item-card">
-    <div class="item-card swiper-slide">
-      <div class="item-card-image-wrapper">
-        <img loading="lazy" class="item-card-image" src="" alt="" />
-      </div>
-
-      <div class="item-card-info">
-        <h2 class="item-card-info-title"></h2>
-        <p class="item-card-info-description"></p>
-        <p class="item-card-info-rating"></p>
-        <p class="item-card-info-price number-color"></p>
-      </div>
     </div>
-  </template>
-  
-  <!-- JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-  <script src="js/set-items.js"></script>
-  <script src="js/hunterscroll.js"></script>
-  <script src="js/floatsidebar.js"></script>
-  <script src="js/hequalizer.js"></script>
-  <script src="js/index.js"></script>
+
+    <!-- Scripts -->
+    <script src="ui/darkui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script src="js/hequalizer.js"></script>
+
+    <script>
+        // Navegación activa
+        const navLinks = document.querySelectorAll('.hequalizer-sidebar-nav a, .sidebar-body a');
+        const sections = document.querySelectorAll('section[id]');
+
+        function updateActiveLink() {
+            let current = 'inicio';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveLink);
+        updateActiveLink();
+
+        // Smooth scroll
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Datos de ejemplo para los demos
+        const demoData = {
+            grid: [
+                {
+                    title: 'Diseño Responsive Profesional',
+                    desc: 'Crea layouts perfectos que se adaptan a cualquier dispositivo.',
+                    vendor: 'Lenin Labs',
+                    rating: 4.9,
+                    price: '$49',
+                    buttonText: 'Ver detalles'
+                },
+                {
+                    title: 'Framework Agnostic',
+                    desc: 'Compatible con React, Vue, Angular, Svelte y vanilla JavaScript. Funciona en cualquier proyecto web sin importar la tecnología.',
+                    vendor: 'WebDev Studio',
+                    rating: 5.0,
+                    price: '$79',
+                    buttonText: 'Comenzar ahora'
+                },
+                {
+                    title: 'Zero Dependencies',
+                    desc: 'Sin dependencias externas. Solo JavaScript puro.',
+                    vendor: 'Pure Code Co.',
+                    rating: 4.7,
+                    price: '$29',
+                    buttonText: 'Descargar'
+                },
+                {
+                    title: 'Performance Optimizado',
+                    desc: 'MutationObserver inteligente que solo recalcula cuando es necesario, manteniendo tu sitio rápido y eficiente.',
+                    vendor: 'Speed Masters',
+                    rating: 4.8,
+                    price: '$59',
+                    buttonText: 'Probar gratis'
+                },
+                {
+                    title: 'API Simple',
+                    desc: 'Fácil de usar con opciones intuitivas.',
+                    vendor: 'Dev Friendly',
+                    rating: 4.6,
+                    price: '$39',
+                    buttonText: 'Ver demo'
+                },
+                {
+                    title: 'Breakpoints Responsive',
+                    desc: 'Sistema completo de breakpoints configurables para cada dispositivo.',
+                    vendor: 'Responsive Solutions',
+                    rating: 4.9,
+                    price: '$69',
+                    buttonText: 'Comprar'
+                }
+            ],
+            carousel: [
+                {
+                    title: 'Proyecto Alpha',
+                    desc: 'Interfaz moderna con animaciones fluidas.',
+                    vendor: 'Creative Agency',
+                    rating: 4.8,
+                    price: '$99',
+                    buttonText: 'Ver proyecto'
+                },
+                {
+                    title: 'Dashboard Analytics',
+                    desc: 'Visualización de datos en tiempo real con gráficos interactivos, métricas detalladas y reportes personalizables.',
+                    vendor: 'Data Insights',
+                    rating: 4.9,
+                    price: '$149',
+                    buttonText: 'Ver demo'
+                },
+                {
+                    title: 'E-commerce Platform',
+                    desc: 'Tienda online completa.',
+                    vendor: 'Shop Solutions',
+                    rating: 4.7,
+                    price: '$199',
+                    buttonText: 'Explorar'
+                },
+                {
+                    title: 'Mobile App',
+                    desc: 'Aplicación nativa multiplataforma con diseño intuitivo.',
+                    vendor: 'App Developers',
+                    rating: 5.0,
+                    price: '$299',
+                    buttonText: 'Descargar'
+                },
+                {
+                    title: 'Portfolio',
+                    desc: 'Showcase profesional de trabajos creativos.',
+                    vendor: 'Design Studio',
+                    rating: 4.6,
+                    price: '$79',
+                    buttonText: 'Ver más'
+                },
+                {
+                    title: 'Admin Panel',
+                    desc: 'Panel de administración con control total.',
+                    vendor: 'Enterprise Systems',
+                    rating: 4.8,
+                    price: '$249',
+                    buttonText: 'Contactar'
+                }
+            ]
+        };
+
+        // Demo 1: Grid
+        function initGridDemo() {
+            const gridContainer = document.getElementById('grid-demo');
+            const gridHeight = document.getElementById('grid-height');
+
+            if (!gridContainer) return;
+
+            demoData.grid.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.style.cssText = 'background: var(--darkui-bg-secondary); border-radius: var(--darkui-radius-md); overflow: hidden; border: 1px solid var(--darkui-border-primary); transition: all var(--darkui-transition-base); display: flex; flex-direction: column;';
+                card.onmouseenter = function() { this.style.transform = 'translateY(-4px)'; this.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)'; };
+                card.onmouseleave = function() { this.style.transform = 'translateY(0)'; this.style.boxShadow = 'none'; };
+
+                const colors = ['667eea', 'f093fb', '4facfe', 'fa709a', '43e97b', 'f857a6'];
+                const imgUrl = `https://ph.soylenin.com/image?size=400x200&background=${colors[index]}&text=${encodeURIComponent(item.title.substring(0, 15))}...`;
+
+                // Generar estrellas para el rating
+                const stars = Array.from({length: 5}, (_, i) => {
+                    const filled = i < Math.floor(item.rating);
+                    return `<span style="color: ${filled ? '#facc15' : 'var(--darkui-text-tertiary)'};">★</span>`;
+                }).join('');
+
+                card.innerHTML = `
+                    <img src="${imgUrl}" alt="${item.title}" style="width: 100%; height: 180px; object-fit: cover;">
+                    <div style="padding: var(--darkui-spacing-4); flex: 1; display: flex; flex-direction: column;">
+                        <div style="display: flex; align-items: center; gap: var(--darkui-spacing-2); margin-bottom: var(--darkui-spacing-2);">
+                            <span style="color: var(--darkui-text-tertiary); font-size: var(--darkui-font-size-xs);">
+                                ${item.vendor}
+                            </span>
+                        </div>
+                        <h4 class="grid-card-title" style="margin-bottom: var(--darkui-spacing-3); color: var(--darkui-text-primary); font-size: var(--darkui-font-size-lg); font-weight: var(--darkui-font-weight-bold);">
+                            ${item.title}
+                        </h4>
+                        <p style="color: var(--darkui-text-secondary); font-size: var(--darkui-font-size-sm); margin-bottom: var(--darkui-spacing-4); flex: 1;">
+                            ${item.desc}
+                        </p>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--darkui-spacing-4);">
+                            <div style="display: flex; align-items: center; gap: var(--darkui-spacing-2);">
+                                <div style="font-size: var(--darkui-font-size-sm);">${stars}</div>
+                                <span style="color: var(--darkui-text-secondary); font-size: var(--darkui-font-size-sm);">${item.rating}</span>
+                            </div>
+                            <span style="color: var(--darkui-color-primary); font-size: var(--darkui-font-size-lg); font-weight: var(--darkui-font-weight-bold);">
+                                ${item.price}
+                            </span>
+                        </div>
+                        <button class="button button-primary" style="width: 100%;">
+                            ${item.buttonText}
+                        </button>
+                    </div>
+                `;
+
+                gridContainer.appendChild(card);
+            });
+
+            // Inicializar Hequalizer
+            setTimeout(() => {
+                const gridTitles = document.querySelectorAll('.grid-card-title');
+                if (gridTitles.length > 0) {
+                    new Hequalizer(gridTitles, {
+                        on: {
+                            init: ({rows, instance}) => {
+                                gridHeight.textContent = rows + 'px';
+                                console.log('Grid demo inicializado:', rows);
+                            },
+                            afterResize: ({rows}) => {
+                                gridHeight.textContent = rows + 'px';
+                            }
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        // Demo 2: Carousel
+        function initCarouselDemo() {
+            const carouselContainer = document.getElementById('carousel-demo');
+            const carouselHeight = document.getElementById('carousel-height');
+
+            if (!carouselContainer) return;
+
+            demoData.carousel.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.style.cssText = 'min-width: 280px; max-width: 280px; background: var(--darkui-bg-secondary); border-radius: var(--darkui-radius-md); overflow: hidden; border: 1px solid var(--darkui-border-primary); scroll-snap-align: start; flex-shrink: 0; display: flex; flex-direction: column;';
+
+                const colors = ['fa7472', '667eea', '764ba2', 'f093fb', '4facfe', '00f2fe'];
+                const imgUrl = `https://ph.soylenin.com/image?size=280x160&background=${colors[index]}&text=${encodeURIComponent(item.title)}`;
+
+                // Generar estrellas para el rating
+                const stars = Array.from({length: 5}, (_, i) => {
+                    const filled = i < Math.floor(item.rating);
+                    return `<span style="color: ${filled ? '#facc15' : 'var(--darkui-text-tertiary)'};">★</span>`;
+                }).join('');
+
+                card.innerHTML = `
+                    <img src="${imgUrl}" alt="${item.title}" style="width: 100%; height: 160px; object-fit: cover;">
+                    <div style="padding: var(--darkui-spacing-4); flex: 1; display: flex; flex-direction: column;">
+                        <div style="display: flex; align-items: center; gap: var(--darkui-spacing-2); margin-bottom: var(--darkui-spacing-2);">
+                            <span style="color: var(--darkui-text-tertiary); font-size: var(--darkui-font-size-xs);">
+                                ${item.vendor}
+                            </span>
+                        </div>
+                        <h5 style="margin-bottom: var(--darkui-spacing-2); color: var(--darkui-text-primary); font-size: var(--darkui-font-size-base); font-weight: var(--darkui-font-weight-bold);">
+                            ${item.title}
+                        </h5>
+                        <p class="carousel-card-desc" style="color: var(--darkui-text-secondary); font-size: var(--darkui-font-size-sm); line-height: 1.5; margin-bottom: var(--darkui-spacing-3); flex: 1;">
+                            ${item.desc}
+                        </p>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--darkui-spacing-3);">
+                            <div style="display: flex; align-items: center; gap: var(--darkui-spacing-2);">
+                                <div style="font-size: var(--darkui-font-size-xs);">${stars}</div>
+                                <span style="color: var(--darkui-text-secondary); font-size: var(--darkui-font-size-xs);">${item.rating}</span>
+                            </div>
+                            <span style="color: var(--darkui-color-primary); font-size: var(--darkui-font-size-base); font-weight: var(--darkui-font-weight-bold);">
+                                ${item.price}
+                            </span>
+                        </div>
+                        <button class="button button-primary button-sm" style="width: 100%;">
+                            ${item.buttonText}
+                        </button>
+                    </div>
+                `;
+
+                carouselContainer.appendChild(card);
+            });
+
+            // Inicializar Hequalizer
+            setTimeout(() => {
+                const carouselDescs = document.querySelectorAll('.carousel-card-desc');
+                if (carouselDescs.length > 0) {
+                    new Hequalizer(carouselDescs, {
+                        on: {
+                            init: ({rows, instance}) => {
+                                carouselHeight.textContent = rows + 'px';
+                                console.log('Carousel demo inicializado:', rows);
+                            },
+                            afterResize: ({rows}) => {
+                                carouselHeight.textContent = rows + 'px';
+                            }
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        // Inicializar demos
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                initGridDemo();
+                initCarouselDemo();
+            });
+        } else {
+            initGridDemo();
+            initCarouselDemo();
+        }
+    </script>
 </body>
 </html>
