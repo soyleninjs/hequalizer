@@ -331,11 +331,13 @@ function Hequalizer(nodeElementsArray, newOptions = {}) {
 
   // ------------------------ INIT ------------------------
 
-  document.addEventListener('DOMContentLoaded', () => {
-    window.setTimeout(() => {
+  document.fonts.ready
+    .then(() => {
       this.init();
-    }, 100);
-  });
+    })
+    .catch((error) => {
+      window.console.log(error);
+    });
 
   window.HequalizerAPI.Instances.push(this);
   return this;
