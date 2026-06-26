@@ -1,6 +1,6 @@
 {
   "name": "hequalizer",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Librería JavaScript ligera que iguala automáticamente las alturas de elementos DOM mediante variables CSS. Perfecta para layouts perfectamente alineados en carousels, grids y tarjetas.",
   "main": "hequalizer.min.js",
   "repository": {
@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/soyleninjs/hequalizer/issues"
   },
-  "homepage": "https://hequalizer.soylenin.com",
+  "homepage": "https://github.com/soyleninjs/hequalizer",
   "keywords": [
     "hequalizer",
     "equalizer",

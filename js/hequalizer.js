@@ -1,45 +1,83 @@
 /**
- * Hequalizer v1.0.0
- *
+ * Hequalizer v2.0.0
 */
 
-const HequalizerUtils = {
-  mergeDeepObject: (...objects) => {
-    const isObject = (obj) => obj && typeof obj === 'object';
+class Hequalizer {
+  static instances = new Map();
 
-    return objects.reduce((prev, obj) => {
-      Object.keys(obj).forEach((key) => {
-        const pVal = prev[key];
-        const oVal = obj[key];
+  static getInstance(handle) {
+    return Hequalizer.instances.get(handle);
+  }
 
-        if (Array.isArray(pVal) && Array.isArray(oVal)) {
-          prev[key] = [...new Set([...oVal, ...pVal])];
-        } else if (isObject(pVal) && isObject(oVal)) {
-          prev[key] = HequalizerUtils.mergeDeepObject(pVal, oVal);
-        } else {
-          prev[key] = oVal;
-        }
+  constructor(handle, options = {}) {
+    // Verificar que se haya proporcionado un handle
+    if (!handle) {
+      throw new Error("Hequalizer: El parámetro handle es obligatorio");
+    }
+
+    // Comprobar si es un handle válido
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(handle)) {
+      throw new Error(`Hequalizer: El handle "${handle}" no es válido. Utilice un identificador diferente.`);
+    }
+
+    // Comprobar si el handle ya está en uso
+    if (Hequalizer.instances.has(handle)) {
+      throw new Error(`Hequalizer: El handle "${handle}" ya está en uso. Utilice un identificador diferente.`);
+    }
+
+    // Usar el handle proporcionado
+    this.handle = handle;
+    this.actualOptions = null;
+    this.allOptions = {};
+
+    this.classes = {
+      zero: 'height-zero',
+      calculating: 'height-calculating',
+      complete: 'height-calculated',
+    };
+
+    this.baseOptions = {
+      cssVariable: '--height',
+      columns: "all",
+      observeResize: true,
+      debounce: 0,
+      responsive: {}
+    };
+
+    this.$elements = document.querySelectorAll(`[data-hequalizer="${handle}"]`)
+    this.values = 0;
+    this.responsive = options.responsive || {}
+    this.breakpoints = Object.keys(this.responsive)
+      .sort((a, b) => a - b)
+      .map((number) => Number(number));
+
+    this.allOptions.default = {...this.baseOptions, ...options};
+    delete this.allOptions.default.responsive;
+    this.breakpoints.forEach((breakpoint) => {
+      this.allOptions[breakpoint] = {...this.baseOptions, ...options, ...this.responsive[breakpoint]};
+      delete this.allOptions[breakpoint].responsive;
+    });
+
+    this.cssVariables = [...new Set(Object.values(this.allOptions).map((option) => option.cssVariable))];
+
+    // Registrar esta instancia con su handle
+    Hequalizer.instances.set(this.handle, this);
+
+    document.fonts.ready
+      .then(() => {
+        this.init();
+      })
+      .catch((error) => {
+        window.console.log(error);
       });
-
-      return prev;
-    }, {});
-  },
-  uniqueID() {
-    const random = Math.random().toString(36).substr(2);
-    const fecha = Date.now().toString(36);
-    return fecha + random;
-  },
-  returnArrayData(data) {
-    return Array.isArray(data) ? data : [data];
-  },
-  cssVariable(DOMElements, cssVariable, cssVariableValue = null) {
-    const elements = HequalizerUtils.returnArrayData(DOMElements);
-
-    if (!elements || elements.length === 0) {
+  }
+  
+  __cssVariable(DOMElements, cssVariable, cssVariableValue = null) {
+    if (!DOMElements || DOMElements.length === 0) {
       return;
     }
 
-    elements.forEach((element, index) => {
+    DOMElements.forEach((element) => {
       if (cssVariableValue === null) {
         element.style.removeProperty(cssVariable);
         return;
@@ -47,315 +85,197 @@ const HequalizerUtils = {
 
       element.style.setProperty(cssVariable, cssVariableValue);
     });
-  },
-  classElements(DOMElements, status, classes) {
-    const classesArray = HequalizerUtils.returnArrayData(classes);
-    const elements = HequalizerUtils.returnArrayData(DOMElements);
+  }
 
-    if (!elements || elements.length === 0) {
+  __classElements(DOMElements, status, classes) {
+    if (!DOMElements || DOMElements.length === 0) {
       return;
     }
 
-    elements.forEach((element) => {
+    DOMElements.forEach((element) => {
       if (status === 'add') {
-        element.classList.add(...classesArray);
+        element.classList.add(...classes);
       }
       if (status === 'remove') {
-        element.classList.remove(...classesArray);
+        element.classList.remove(...classes);
       }
-    });
-  },
-};
-
-function Hequalizer(nodeElementsArray, newOptions = {}) {
-  // ------------------------ VARAIBLES ------------------------
-
-  let actualOptions, filteredElements;
-  let totalOptions = {};
-  let elementsChangesObservers = [];
-  let dontCalc = false;
-  const classes = {
-    zero: 'height-zero',
-    calculating: 'height-calculating',
-    complete: 'height-calculated',
-  };
-  const baseOptions = {
-    cssVariable: '--height',
-    columns: "all",
-    initialIndex: 0,
-    resizeObserver: true,
-    classElementToOmit: '',
-    on: {
-      init: ({rows, instance}) => {},
-      afterResize: ({rows, instance}) => {},
-      afterChanges: ({rows, instance}) => {},
-      afterUpdate: ({rows, instance}) => {},
-      afterDestroy: ({rows, instance}) => {},
-    },
-    responsive: {}
-  };
-
-  this.id = HequalizerUtils.uniqueID();
-  this.elementsArray = nodeElementsArray;
-  this.values = 0;
-  this.responsive = newOptions.responsive || {}
-  let lastBreakpoint = null;
-  const breakpoints = Object.keys(this.responsive)
-    .sort((a, b) => a - b)
-    .map((number) => Number(number));
-
-  // ------------------------ END VARAIBLES ------------------------
-
-  // ------------------------ FUNCTIONALITY ------------------------
-
-  const prepareData = (options) => {
-    actualOptions = options;
-    filteredElements = [...nodeElementsArray].filter((element, index) => {
-      if (actualOptions.initialIndex > 0) {
-        if (index >= actualOptions.initialIndex) {
-          return element;
-        }
-      } else {
-        return element;
-      }
-
-      return false;
     });
   }
 
-  const configAllOptions = () => {   
-    totalOptions.default = HequalizerUtils.mergeDeepObject(baseOptions, newOptions);
-    breakpoints.forEach((breakpoint) => {
-      totalOptions[breakpoint] = HequalizerUtils.mergeDeepObject(baseOptions, newOptions, this.responsive[breakpoint]);
-    });
-  }
+  _setActualOptions() {
+    const breakpointActual = this.breakpoints.find((breakpoint) => window.innerWidth <= breakpoint);
 
-  const setActualOptions = () => {   
-    const breakpointActual = breakpoints.find((breakpoint) => window.innerWidth <= breakpoint);
-
-    if (lastBreakpoint !== breakpointActual) {
-      if (breakpointActual === undefined) {
-        prepareData(totalOptions.default)
-        this.actualBreakpoint = "default"
-      } else {
-        prepareData(totalOptions[breakpointActual])
-        this.actualBreakpoint = breakpointActual
-      }
-      lastBreakpoint = breakpointActual;
-      this.actualOptions = actualOptions
+    if (breakpointActual === undefined) {
+      this.actualOptions = this.allOptions.default
+      this.actualBreakpoint = "default"
+    } else {
+      this.actualOptions = this.allOptions[breakpointActual];
+      this.actualBreakpoint = breakpointActual
     }
   }
 
-  const setCallbacks = (calledOn, rows = null) => {
-    if (calledOn === 'init') {
-      actualOptions.on.init({rows, instance: this});
-    }
-    if (calledOn === 'resize') {
-      actualOptions.on.afterResize({rows, instance: this});
-    }
-    if (calledOn === 'changes') {
-      actualOptions.on.afterChanges({rows, instance: this});
-    }
-    if (calledOn === 'update') {
-      actualOptions.on.afterUpdate({rows, instance: this});
-    }
-    if (calledOn === 'destroy') {
-      actualOptions.on.afterDestroy({rows,instance: this});
-    }
-  };
-
-  const setMaxHeightElements = (calledOn) => {
+  _setMaxHeightElements(calledFrom) {
     let maxValue = 0;
+    const $elements = [...this.$elements];
+    this._cleanHeightElements();
 
-    if (!actualOptions.resizeObserver) {
-      if (dontCalc) return;
-      HequalizerUtils.cssVariable([...filteredElements], actualOptions.cssVariable);
-      HequalizerUtils.classElements([...filteredElements], 'remove', [classes.zero, classes.complete]);
+    if ((calledFrom === 'resize' && !this.actualOptions.observeResize) || this.actualOptions.columns <= 1) {
       this.values = maxValue;
-      dontCalc = true
       return;
     }
-    dontCalc = false
 
-    if (actualOptions.columns == "all") {
+    if (this.actualOptions.columns === "all") {
       maxValue = 0;
-      const $elements = [...filteredElements];
+      this.__classElements($elements, 'add', [this.classes.calculating]);
 
-      HequalizerUtils.cssVariable($elements, actualOptions.cssVariable);
-      HequalizerUtils.classElements($elements, 'remove', [classes.zero, classes.calculating, classes.complete]);
-      HequalizerUtils.classElements($elements, 'add', classes.calculating);
-
-      $elements.forEach(($element, index) => {
-        const elementToOmit = $element.classList.contains(
-          actualOptions.classElementToOmit,
-        );
-
-        if ($element.offsetHeight > maxValue && !elementToOmit) {
+      $elements.forEach(($element) => {
+        if ($element.offsetHeight > maxValue) {
           maxValue = $element.offsetHeight;
         }
       });
 
-      HequalizerUtils.cssVariable($elements, actualOptions.cssVariable, `${maxValue}px`);
-      HequalizerUtils.classElements($elements, 'remove', classes.calculating);
-      if (maxValue > 0) {
-        HequalizerUtils.classElements($elements, 'add', classes.complete);
-      } else {
-        HequalizerUtils.classElements($elements, 'add', classes.zero);
-      }
+      this.__classElements($elements, 'remove', [this.classes.calculating]);
+      this.__cssVariable($elements, this.actualOptions.cssVariable, maxValue > 0 ? `${maxValue}px` : '');
+      this.__classElements($elements, 'add', [maxValue > 0 ? this.classes.complete : this.classes.zero]);
 
       this.values = maxValue;
-      setCallbacks(calledOn, maxValue);
     } else {
       const groupsElements = [];
       const arrayMaxValues = [];
-      const $elements = [...filteredElements];
 
-      let totalItems = $elements.length;
-      while (totalItems !== 0) {
-        const lastGroup = $elements.splice(0, actualOptions.columns);
-        groupsElements.push(lastGroup);
-        totalItems = $elements.length;
+      for (let i = 0; i < $elements.length; i += this.actualOptions.columns) {
+        groupsElements.push($elements.slice(i, i + this.actualOptions.columns));
       }
 
       groupsElements.forEach(($group) => {
         maxValue = 0;
+        this.__classElements($group, 'add', [this.classes.calculating]);
 
-        HequalizerUtils.cssVariable($group, actualOptions.cssVariable);
-        HequalizerUtils.classElements($group, 'remove', [classes.zero, classes.calculating, classes.complete]);
-        HequalizerUtils.classElements($group, 'add', classes.calculating);
-
-        $group.forEach((element, index) => {
-          const elementToOmit = element.classList.contains(
-            actualOptions.classElementToOmit,
-          );
-
-          if (element.offsetHeight > maxValue && !elementToOmit) {
+        $group.forEach((element) => {
+          if (element.offsetHeight > maxValue) {
             maxValue = element.offsetHeight;
           }
         });
 
-        HequalizerUtils.cssVariable($group, actualOptions.cssVariable, `${maxValue}px`);
-        HequalizerUtils.classElements($group, 'remove', classes.calculating);
-        if (maxValue > 0) {
-          HequalizerUtils.classElements($group, 'add', classes.complete);
-        } else {
-          HequalizerUtils.classElements($group, 'add', classes.zero);
-        }
+        this.__classElements($group, 'remove', [this.classes.calculating]);
+        this.__cssVariable($group, this.actualOptions.cssVariable, maxValue > 0 ? `${maxValue}px` : '');
+        this.__classElements($group, 'add', [maxValue > 0 ? this.classes.complete : this.classes.zero]);
 
         arrayMaxValues.push(maxValue);
       });
 
       this.values = arrayMaxValues;
-      setCallbacks(calledOn, arrayMaxValues);
     }
   };
 
-  const cleanHeightElements = () => {
-    [...filteredElements].forEach(($element, index) => {
-      $element.style.removeProperty(actualOptions.cssVariable);
-    });
+  _cleanHeightElements() {
+    this.cssVariables.forEach((cssVariable) => this.__cssVariable(this.$elements, cssVariable));
+    this.__classElements(this.$elements, 'remove', [this.classes.zero, this.classes.calculating, this.classes.complete]);
   };
 
-  const updateAfterResize = () => {
-    setActualOptions()
-    setMaxHeightElements('resize');
+  // Resize Listener
+  _updateAfterResize = () => {
+    this._setActualOptions();
+    window.clearTimeout(this._resizeTimeout);
+
+    if (!this.actualOptions.observeResize) return
+
+    if (this.actualOptions.debounce === 0) {
+      this._setMaxHeightElements('resize');
+      this._emitCustomEvent('resize');
+      return;
+    }
+
+    this._resizeTimeout = window.setTimeout(() => {
+      this._setMaxHeightElements('resize');
+      this._emitCustomEvent('resize');
+    }, this.actualOptions.debounce);
+    
   };
 
-  const updateAfterChanges = () => {
-    setMaxHeightElements('changes');
+  _setResizeListener(enable = true) {
+    window.removeEventListener('resize', this._updateAfterResize);
+
+    if (enable) {
+      window.addEventListener('resize', this._updateAfterResize);
+    };
   };
 
-  const setChangesObserver = () => {
-    [...filteredElements].forEach((element) => {
-      const elementChangesObserver = new window.MutationObserver(updateAfterChanges);
-      elementsChangesObservers.push(elementChangesObserver);
-    });
+  // Changes Listener
+  _updateAfterChanges = () => {
+    window.clearTimeout(this._changesTimeout);
+    this._changesTimeout = window.setTimeout(() => {
+      this._setMaxHeightElements('change');
+      this._emitCustomEvent('change');
+    }, 20);
   };
-
-  const startResizeCalculation = () => {
-    window.addEventListener('resize', updateAfterResize);
-  };
-
-  const stopResizeCalculation = () => {
-    window.removeEventListener('resize', updateAfterResize);
-  };
-
-  const startChangesObserver = () => {
-    setChangesObserver();
-    [...filteredElements].forEach((element, index) => {
-      elementsChangesObservers[index].observe(element, {
-        childList: true,
-        subtree: true,
-        characterData: true,
+  
+  _setChangesListener(enable = true) {
+    if (enable) {
+      this.$elements.forEach((element) => {
+        if (!element.observer) {
+          element.observer = new MutationObserver(this._updateAfterChanges);
+        }
+  
+        element.observer.observe(element, {
+          childList: true,
+          subtree: true,
+          characterData: true,
+        });
       });
-    });
-  };
-
-  const stopChangesObserver = () => {
-    [...filteredElements].forEach((element, index) => {
-      elementsChangesObservers[index].disconnect();
-    });
-    elementsChangesObservers = [];
-  };
-
-  // ------------------------ END FUNCTIONALITY ------------------------
-
-  // ------------------------ METHODS ------------------------
-
-  this.update = () => {
-    setMaxHeightElements('update');
-  };
-
-  this.init = () => {
-    configAllOptions();
-    setActualOptions();
-    setMaxHeightElements('init');
-    startResizeCalculation();
-    startChangesObserver();
-  };
-
-  this.destroy = (destroyInstance = false) => {
-    cleanHeightElements();
-    stopResizeCalculation();
-    stopChangesObserver();
-    this.values = 0;
-
-    if (destroyInstance) {
-      window.HequalizerAPI.removeInstance(this.id)
+  
+      return;
     }
+  
+    this.$elements.forEach((element) => {
+      element.observer?.disconnect();
+      delete element.observer;
+    });
+  }
 
-    setCallbacks('destroy');
+  // Custom Event
+  _emitCustomEvent(name) {
+    const nameEvent = `hequalizer:${this.handle}:${name}`;
+    window.dispatchEvent(new window.CustomEvent(nameEvent, {
+      detail: {
+        instance: this,
+      }
+    }));
+  }
+
+  // ------------------------ Public Methods ------------------------
+  init() {
+    this._setActualOptions();
+    this._setMaxHeightElements("init");
+    this._setResizeListener();
+    this._setChangesListener();
+    this._emitCustomEvent('init');
   };
 
-  // ------------------------ END METHODS ------------------------
+  update() {
+    this._setMaxHeightElements("update");
+    this._emitCustomEvent('update');
+  };
 
-  // ------------------------ INIT ------------------------
+  refreshElements() {
+    this._setChangesListener(false);
+    this.$elements = document.querySelectorAll(`[data-hequalizer="${this.handle}"]`);
+    this._setActualOptions()
+    this._setMaxHeightElements('refresh');
+    this._setChangesListener();
+    this._emitCustomEvent('refresh');
+  }
 
-  document.fonts.ready
-    .then(() => {
-      this.init();
-    })
-    .catch((error) => {
-      window.console.log(error);
-    });
-
-  window.HequalizerAPI.Instances.push(this);
-  return this;
-  // ------------------------ END INIT ------------------------
+  destroy() {
+    this.values = 0;
+    this._cleanHeightElements();
+    this._setResizeListener(false);
+    this._setChangesListener(false);
+    window.clearTimeout(this._resizeTimeout);
+    window.clearTimeout(this._changesTimeout);
+    this._emitCustomEvent('destroy');
+    Hequalizer.instances.delete(this.handle);
+  };
 }
 
-window.HequalizerAPI = window.HequalizerAPI || {
-  Init: Hequalizer,
-  Instances: [],
-  removeInstance: (id) => {
-    const cleanInstances = window.HequalizerAPI.Instances.filter((instance) => {
-      return instance.id !== id
-    })
-
-    window.HequalizerAPI.Instances = cleanInstances
-  } 
-};
-
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-  module.exports = Hequalizer;
-}
+window.Hequalizer = Hequalizer;
