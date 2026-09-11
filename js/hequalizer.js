@@ -1,5 +1,5 @@
 /**
- * Hequalizer v2.0.0
+ * Hequalizer v2.2.0
 */
 
 class Hequalizer {
@@ -38,23 +38,26 @@ class Hequalizer {
 
     this.baseOptions = {
       cssVariable: '--height',
+      customSelector: "",
       columns: "all",
       observeResize: true,
       debounce: 0,
+      indexesToOmit: [],
       responsive: {}
     };
 
-    this.$elements = document.querySelectorAll(`[data-hequalizer="${handle}"]`)
+    this.customSelector = options.customSelector !== undefined && options.customSelector !== "" ? options.customSelector : `[data-hequalizer="${handle}"]`
+    this.$elements = document.querySelectorAll(this.customSelector)
     this.values = 0;
     this.responsive = options.responsive || {}
     this.breakpoints = Object.keys(this.responsive)
       .sort((a, b) => a - b)
       .map((number) => Number(number));
 
-    this.allOptions.default = {...this.baseOptions, ...options};
+    this.allOptions.default = { ...this.baseOptions, ...options };
     delete this.allOptions.default.responsive;
     this.breakpoints.forEach((breakpoint) => {
-      this.allOptions[breakpoint] = {...this.baseOptions, ...options, ...this.responsive[breakpoint]};
+      this.allOptions[breakpoint] = { ...this.baseOptions, ...options, ...this.responsive[breakpoint] };
       delete this.allOptions[breakpoint].responsive;
     });
 
@@ -71,7 +74,7 @@ class Hequalizer {
         window.console.log(error);
       });
   }
-  
+
   __cssVariable(DOMElements, cssVariable, cssVariableValue = null) {
     if (!DOMElements || DOMElements.length === 0) {
       return;
@@ -140,12 +143,29 @@ class Hequalizer {
 
       this.values = maxValue;
     } else {
-      const groupsElements = [];
-      const arrayMaxValues = [];
+      function groupElements(elements, columns, omits = []) {
+        const groups = [];
 
-      for (let i = 0; i < $elements.length; i += this.actualOptions.columns) {
-        groupsElements.push($elements.slice(i, i + this.actualOptions.columns));
+        let elementIndex = 0;
+        let gridIndex = 0;
+
+        while (elementIndex < elements.length) {
+          const group = [];
+
+          for (let column = 0; column < columns; column++, gridIndex++) {
+            if (!omits.includes(gridIndex) && elementIndex < elements.length) {
+              group.push(elements[elementIndex++]);
+            }
+          }
+
+          if (group.length) groups.push(group);
+        }
+
+        return groups;
       }
+
+      const groupsElements = groupElements($elements, this.actualOptions.columns, this.actualOptions.indexesToOmit);
+      const arrayMaxValues = [];
 
       groupsElements.forEach(($group) => {
         maxValue = 0;
@@ -190,7 +210,6 @@ class Hequalizer {
       this._setMaxHeightElements('resize');
       this._emitCustomEvent('resize');
     }, this.actualOptions.debounce);
-    
   };
 
   _setResizeListener(enable = true) {
@@ -209,24 +228,24 @@ class Hequalizer {
       this._emitCustomEvent('change');
     }, 20);
   };
-  
+
   _setChangesListener(enable = true) {
     if (enable) {
       this.$elements.forEach((element) => {
         if (!element.observer) {
           element.observer = new MutationObserver(this._updateAfterChanges);
         }
-  
+
         element.observer.observe(element, {
           childList: true,
           subtree: true,
           characterData: true,
         });
       });
-  
+
       return;
     }
-  
+
     this.$elements.forEach((element) => {
       element.observer?.disconnect();
       delete element.observer;
@@ -259,8 +278,8 @@ class Hequalizer {
 
   refreshElements() {
     this._setChangesListener(false);
-    this.$elements = document.querySelectorAll(`[data-hequalizer="${this.handle}"]`);
     this._setActualOptions()
+    this.$elements = document.querySelectorAll(this.customSelector)
     this._setMaxHeightElements('refresh');
     this._setChangesListener();
     this._emitCustomEvent('refresh');

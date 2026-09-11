@@ -1,37 +1,40 @@
 # Hequalizer
 
-Hequalizer es una libreria JavaScript ligera para igualar alturas de elementos DOM mediante variables CSS. Trabaja por `handle`: marcas los elementos con `data-hequalizer`, creas una instancia con ese mismo identificador y Hequalizer calcula la altura maxima para aplicarla como una variable CSS.
+Hequalizer es una librería JavaScript ligera para igualar las alturas de elementos DOM mediante variables CSS. Trabaja por `handle`: marcas los elementos con `data-hequalizer`, creas una instancia con ese mismo identificador y Hequalizer calcula la altura máxima para aplicarla como una variable CSS.
 
-## Caracteristicas
+## Características
 
-- Igualacion de alturas con variables CSS personalizables.
+- Igualación de alturas con variables CSS personalizables.
 - API por `handle`, ideal para manejar grupos independientes de elementos.
+- Selector personalizado para elegir los elementos con cualquier selector CSS.
 - Soporte responsive con opciones distintas por breakpoint.
-- Modos de calculo para todos los elementos o por grupos de columnas.
-- Recalculo automatico en `resize` y cuando cambia el contenido observado.
+- Modos de cálculo para todos los elementos o por grupos de columnas.
+- Omisión de posiciones de la grilla al agrupar por columnas mediante `indexesToOmit`.
+- Recálculo automático en `resize` y cuando cambia el contenido observado.
 - Eventos globales con `CustomEvent` para cada etapa importante.
 - Registro interno de instancias con `Hequalizer.getInstance(handle)`.
 - JavaScript vanilla, sin dependencias.
 
-## Menu
+## Menú
 
 - [Hequalizer](#hequalizer)
-  - [Caracteristicas](#caracteristicas)
-  - [Menu](#menu)
-  - [Instalacion](#instalacion)
+  - [Características](#características)
+  - [Menú](#menú)
+  - [Instalación](#instalación)
     - [NPM](#npm)
     - [CDN](#cdn)
     - [Descarga directa](#descarga-directa)
-  - [Uso basico](#uso-basico)
+  - [Uso básico](#uso-básico)
     - [HTML](#html)
     - [JavaScript](#javascript)
     - [CSS](#css)
   - [API](#api)
     - [Constructor](#constructor)
-    - [Seleccion de elementos](#seleccion-de-elementos)
-    - [Metodos de instancia](#metodos-de-instancia)
+    - [Selección de elementos](#selección-de-elementos)
+    - [Selector personalizado](#selector-personalizado)
+    - [Métodos de instancia](#métodos-de-instancia)
     - [Registro de instancias](#registro-de-instancias)
-    - [Propiedades utiles](#propiedades-utiles)
+    - [Propiedades útiles](#propiedades-útiles)
   - [Opciones](#opciones)
   - [Sistema responsive](#sistema-responsive)
     - [Variables CSS responsive](#variables-css-responsive)
@@ -41,25 +44,26 @@ Hequalizer es una libreria JavaScript ligera para igualar alturas de elementos D
     - [`columns: "all"`](#columns-all)
     - [`columns: 2`, `3`, `4`, etc.](#columns-2-3-4-etc)
     - [`columns <= 1`](#columns--1)
-  - [Actualizacion automatica](#actualizacion-automatica)
+    - [Omisión de posiciones](#omisión-de-posiciones)
+  - [Actualización automática](#actualización-automática)
     - [Carga inicial y fuentes](#carga-inicial-y-fuentes)
     - [Resize](#resize)
     - [Cambios de contenido](#cambios-de-contenido)
     - [Elementos agregados o eliminados](#elementos-agregados-o-eliminados)
   - [Ejemplos](#ejemplos)
     - [Grid responsive](#grid-responsive)
-    - [Multiples grupos](#multiples-grupos)
+    - [Múltiples grupos](#múltiples-grupos)
     - [Carousel o slider](#carousel-o-slider)
     - [Desactivar en mobile](#desactivar-en-mobile)
-  - [Buenas practicas](#buenas-practicas)
-  - [Solucion de problemas](#solucion-de-problemas)
+  - [Buenas prácticas](#buenas-prácticas)
+  - [Solución de problemas](#solución-de-problemas)
   - [Compatibilidad](#compatibilidad)
     - [Ejemplo en React](#ejemplo-en-react)
   - [Contribuir](#contribuir)
   - [Licencia](#licencia)
   - [Autor](#autor)
 
-## Instalacion
+## Instalación
 
 ### NPM
 
@@ -75,7 +79,7 @@ npm install hequalizer
 
 ### Descarga directa
 
-Descarga `hequalizer.js` o `hequalizer.min.js` desde el repositorio o desde GitHub Releases e incluyelo en tu HTML:
+Descarga `hequalizer.js` o `hequalizer.min.js` desde el repositorio o desde GitHub Releases e inclúyelo en tu HTML:
 
 ```html
 <script src="./js/hequalizer.js"></script>
@@ -83,26 +87,26 @@ Descarga `hequalizer.js` o `hequalizer.min.js` desde el repositorio o desde GitH
 
 El script expone la clase en `window.Hequalizer`.
 
-## Uso basico
+## Uso básico
 
 ### HTML
 
-Usa el atributo `data-hequalizer` para indicar que elementos pertenecen al mismo grupo. El valor del atributo debe coincidir con el `handle` que usaras al crear la instancia.
+Usa el atributo `data-hequalizer` para indicar qué elementos pertenecen al mismo grupo. El valor del atributo debe coincidir con el `handle` que usarás al crear la instancia.
 
 ```html
 <div class="cards">
   <article class="card">
-    <h3 data-hequalizer="card-title">Titulo corto</h3>
+    <h3 data-hequalizer="card-title">Título corto</h3>
     <p>Contenido de la tarjeta.</p>
   </article>
 
   <article class="card">
-    <h3 data-hequalizer="card-title">Titulo mucho mas largo que ocupa mas lineas</h3>
+    <h3 data-hequalizer="card-title">Título mucho más largo que ocupa más líneas</h3>
     <p>Contenido de la tarjeta.</p>
   </article>
 
   <article class="card">
-    <h3 data-hequalizer="card-title">Otro titulo</h3>
+    <h3 data-hequalizer="card-title">Otro título</h3>
     <p>Contenido de la tarjeta.</p>
   </article>
 </div>
@@ -118,7 +122,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 ### CSS
 
-Hequalizer solo calcula y asigna la variable CSS. Tu CSS decide como usarla.
+Hequalizer solo calcula y asigna la variable CSS. Tu CSS decide cómo usarla.
 
 ```css
 [data-hequalizer="card-title"] {
@@ -136,24 +140,24 @@ Por defecto la variable aplicada es `--height`.
 const instance = new Hequalizer(handle, options);
 ```
 
-| Parametro | Tipo | Requerido | Descripcion |
+| Parámetro | Tipo | Requerido | Descripción |
 | --- | --- | --- | --- |
-| `handle` | `String` | Si | Identificador del grupo. Debe coincidir con `data-hequalizer="handle"`. |
-| `options` | `Object` | No | Configuracion de la instancia. |
+| `handle` | `String` | Sí | Identificador del grupo. Debe coincidir con `data-hequalizer="handle"`. |
+| `options` | `Object` | No | Configuración de la instancia. |
 
-El `handle` es obligatorio y debe usar solo letras minusculas, numeros y guiones en formato tipo slug:
+El `handle` es obligatorio y debe usar solo letras minúsculas, números y guiones en formato tipo slug:
 
 ```javascript
-new Hequalizer('product-card-title'); // valido
-new Hequalizer('Product Title');      // invalido
-new Hequalizer('product_title');      // invalido
+new Hequalizer('product-card-title'); // válido
+new Hequalizer('Product Title');      // inválido
+new Hequalizer('product_title');      // inválido
 ```
 
-Si el `handle` ya esta registrado en otra instancia activa, el constructor lanza un error. Para volver a usar el mismo `handle`, primero destruye esa instancia con `destroy()`.
+Si el `handle` ya está registrado en otra instancia activa, el constructor lanza un error. Para volver a usar el mismo `handle`, primero destruye esa instancia con `destroy()`.
 
-### Seleccion de elementos
+### Selección de elementos
 
-La instancia selecciona automaticamente todos los elementos que tengan el atributo `data-hequalizer` con el `handle` indicado:
+La instancia selecciona automáticamente todos los elementos que tengan el atributo `data-hequalizer` con el `handle` indicado:
 
 ```javascript
 this.$elements = document.querySelectorAll(`[data-hequalizer="${handle}"]`);
@@ -161,18 +165,44 @@ this.$elements = document.querySelectorAll(`[data-hequalizer="${handle}"]`);
 
 El constructor recibe el `handle` del grupo; los elementos se definen directamente en el HTML con `data-hequalizer`.
 
-### Metodos de instancia
+### Selector personalizado
 
-| Metodo | Descripcion |
+Si no quieres usar `data-hequalizer`, puedes indicar cualquier selector CSS con la opción `customSelector`. Hequalizer usará ese selector para encontrar los elementos del grupo.
+
+```html
+<div class="cards">
+  <article class="card">
+    <h3 class="card-title">Título corto</h3>
+  </article>
+
+  <article class="card">
+    <h3 class="card-title">Título mucho más largo que ocupa más líneas</h3>
+  </article>
+</div>
+```
+
+```javascript
+new Hequalizer('card-title', {
+  customSelector: '.cards .card-title'
+});
+```
+
+Cuando `customSelector` es una cadena vacía, que es el valor por defecto, la instancia usa `[data-hequalizer="{handle}"]`.
+
+`customSelector` se lee una sola vez al crear la instancia. Defínelo en las opciones base y no dentro de `responsive`, ya que los cambios por breakpoint no vuelven a seleccionar elementos.
+
+### Métodos de instancia
+
+| Método | Descripción |
 | --- | --- |
-| `init()` | Inicializa o reinicializa la instancia: define opciones actuales, calcula alturas, activa listeners y emite `init`. Se ejecuta automaticamente despues de `document.fonts.ready`. |
+| `init()` | Inicializa o reinicializa la instancia: define opciones actuales, calcula alturas, activa listeners y emite `init`. Se ejecuta automáticamente después de `document.fonts.ready`. |
 | `update()` | Recalcula manualmente las alturas de los elementos actuales con las opciones activas y emite `update`. |
-| `refreshElements()` | Vuelve a consultar el DOM con el selector `[data-hequalizer="handle"]`, actualiza las opciones activas, recalcula alturas, reinicia los observers y emite `refresh`. Usalo cuando agregues o elimines elementos. |
+| `refreshElements()` | Vuelve a consultar el DOM con el selector configurado, actualiza las opciones activas, recalcula alturas, reinicia los observers y emite `refresh`. Úsalo cuando agregues o elimines elementos. |
 | `destroy()` | Limpia variables y clases, remueve listeners, desconecta observers, cancela timeouts, emite `destroy` y elimina la instancia del registro interno. |
 
 ### Registro de instancias
 
-Hequalizer guarda las instancias activas en un `Map` estatico usando el `handle` como llave.
+Hequalizer guarda las instancias activas en un `Map` estático usando el `handle` como llave.
 
 ```javascript
 const titles = new Hequalizer('card-title');
@@ -184,18 +214,19 @@ titles.destroy();
 console.log(Hequalizer.getInstance('card-title')); // undefined
 ```
 
-### Propiedades utiles
+### Propiedades útiles
 
-| Propiedad | Tipo | Descripcion |
+| Propiedad | Tipo | Descripción |
 | --- | --- | --- |
 | `handle` | `String` | Identificador de la instancia. |
-| `$elements` | `NodeList` | Elementos encontrados con `data-hequalizer`. |
-| `values` | `Number \| Array` | Ultima altura calculada. Es `Number` con `columns: "all"` y `Array` con columnas numericas. |
-| `actualOptions` | `Object` | Opciones activas segun el breakpoint actual. |
-| `actualBreakpoint` | `String \| Number` | `"default"` cuando no aplica ningun breakpoint, o el numero del breakpoint activo. |
-| `responsive` | `Object` | Configuracion responsive recibida. |
+| `$elements` | `NodeList` | Elementos encontrados con el selector activo. |
+| `customSelector` | `String` | Selector CSS usado para encontrar los elementos. Por defecto `[data-hequalizer="handle"]`. |
+| `values` | `Number \| Array` | Última altura calculada. Es `Number` con `columns: "all"` y `Array` con columnas numéricas. |
+| `actualOptions` | `Object` | Opciones activas según el breakpoint actual. |
+| `actualBreakpoint` | `String \| Number` | `"default"` cuando no aplica ningún breakpoint, o el número del breakpoint activo. |
+| `responsive` | `Object` | Configuración responsive recibida. |
 | `breakpoints` | `Array` | Breakpoints ordenados de menor a mayor. |
-| `cssVariables` | `Array` | Variables CSS usadas por la configuracion base y responsive. |
+| `cssVariables` | `Array` | Variables CSS usadas por la configuración base y responsive. |
 
 ## Opciones
 
@@ -209,19 +240,21 @@ new Hequalizer('card-title', {
 });
 ```
 
-| Opcion | Tipo | Default | Descripcion |
+| Opción | Tipo | Default | Descripción |
 | --- | --- | --- | --- |
 | `cssVariable` | `String` | `'--height'` | Nombre de la variable CSS que se asigna a los elementos. |
-| `columns` | `String \| Number` | `'all'` | Define como se agrupan los elementos para calcular alturas. Usa `"all"` o un numero mayor a `1`. |
-| `observeResize` | `Boolean` | `true` | Permite recalcular en eventos `resize`. Si es `false`, el listener de resize no recalcula ni emite evento mientras esa opcion este activa. |
-| `debounce` | `Number` | `0` | Tiempo en milisegundos para retrasar el recalculo por `resize`. Con `0`, recalcula inmediatamente. |
-| `responsive` | `Object` | `{}` | Configuracion por breakpoint. Cada breakpoint puede sobrescribir las opciones principales. |
+| `customSelector` | `String` | `""` | Selector CSS para elegir los elementos del grupo. Si está vacío, usa `[data-hequalizer="handle"]`. Se define solo en las opciones base. |
+| `columns` | `String \| Number` | `'all'` | Define cómo se agrupan los elementos para calcular alturas. Usa `"all"` o un número mayor a `1`. |
+| `indexesToOmit` | `Array` | `[]` | Índices de la grilla (base `0`) que se omiten al agrupar con `columns` numérico. Solo aplica cuando `columns` es mayor a `1`. |
+| `observeResize` | `Boolean` | `true` | Permite recalcular en eventos `resize`. Si es `false`, el listener de resize no recalcula ni emite evento mientras esa opción esté activa. |
+| `debounce` | `Number` | `0` | Tiempo en milisegundos para retrasar el recálculo por `resize`. Con `0`, recalcula inmediatamente. |
+| `responsive` | `Object` | `{}` | Configuración por breakpoint. Cada breakpoint puede sobrescribir las opciones principales. |
 
-Los eventos se escuchan con `window.addEventListener` usando el formato documentado en la seccion [Eventos](#eventos).
+Los eventos se escuchan con `window.addEventListener` usando el formato documentado en la sección [Eventos](#eventos).
 
 ## Sistema responsive
 
-La opcion `responsive` permite cambiar la configuracion segun `window.innerWidth`.
+La opción `responsive` permite cambiar la configuración según `window.innerWidth`.
 
 ```javascript
 new Hequalizer('product-title', {
@@ -247,11 +280,11 @@ Funcionamiento:
 
 1. Los breakpoints se ordenan de menor a mayor.
 2. Se usa el primer breakpoint que cumpla `window.innerWidth <= breakpoint`.
-3. Si ningun breakpoint coincide, se usa la configuracion `default`.
+3. Si ningún breakpoint coincide, se usa la configuración `default`.
 4. Las opciones del breakpoint se fusionan con las opciones base.
-5. La propiedad `actualBreakpoint` queda como el numero activo o `"default"`.
+5. La propiedad `actualBreakpoint` queda como el número activo o `"default"`.
 
-Con esta configuracion:
+Con esta configuración:
 
 | Viewport | Breakpoint activo | Opciones principales |
 | --- | --- | --- |
@@ -262,7 +295,7 @@ Con esta configuracion:
 
 ### Variables CSS responsive
 
-Si cambias `cssVariable` por breakpoint, Hequalizer recuerda todas las variables configuradas y las limpia antes de cada calculo. Esto evita que una variable de otro breakpoint se quede aplicada al elemento cuando cambia el viewport.
+Si cambias `cssVariable` por breakpoint, Hequalizer recuerda todas las variables configuradas y las limpia antes de cada cálculo. Esto evita que una variable de otro breakpoint se quede aplicada al elemento cuando cambia el viewport.
 
 ```css
 [data-hequalizer="product-title"] {
@@ -288,12 +321,12 @@ Todos los eventos incluyen la instancia en `event.detail.instance`.
 
 | Evento | Se emite cuando |
 | --- | --- |
-| `hequalizer:{handle}:init` | Termina la inicializacion. |
-| `hequalizer:{handle}:resize` | Termina un recalculo provocado por `resize`. |
-| `hequalizer:{handle}:change` | Termina un recalculo provocado por cambios en el contenido observado. |
+| `hequalizer:{handle}:init` | Termina la inicialización. |
+| `hequalizer:{handle}:resize` | Termina un recálculo provocado por `resize`. |
+| `hequalizer:{handle}:change` | Termina un recálculo provocado por cambios en el contenido observado. |
 | `hequalizer:{handle}:update` | Termina una llamada manual a `update()`. |
 | `hequalizer:{handle}:refresh` | Termina una llamada a `refreshElements()`. |
-| `hequalizer:{handle}:destroy` | Termina la destruccion de la instancia. |
+| `hequalizer:{handle}:destroy` | Termina la destrucción de la instancia. |
 
 Ejemplo:
 
@@ -310,7 +343,7 @@ window.addEventListener('hequalizer:card-title:resize', (event) => {
 });
 
 window.addEventListener('hequalizer:card-title:change', (event) => {
-  console.log('El contenido cambio:', event.detail.instance.values);
+  console.log('El contenido cambió:', event.detail.instance.values);
 });
 
 window.addEventListener('hequalizer:card-title:refresh', (event) => {
@@ -320,15 +353,15 @@ window.addEventListener('hequalizer:card-title:refresh', (event) => {
 
 ## Clases de estado
 
-Hequalizer agrega y remueve clases durante el calculo.
+Hequalizer agrega y remueve clases durante el cálculo.
 
-| Clase | Descripcion |
+| Clase | Descripción |
 | --- | --- |
-| `.height-calculating` | Se agrega mientras se estan midiendo los elementos. |
-| `.height-calculated` | Se agrega cuando el calculo encontro una altura mayor a `0`. |
-| `.height-zero` | Se agrega cuando la altura maxima calculada es `0`. |
+| `.height-calculating` | Se agrega mientras se están midiendo los elementos. |
+| `.height-calculated` | Se agrega cuando el cálculo encontró una altura mayor a `0`. |
+| `.height-zero` | Se agrega cuando la altura máxima calculada es `0`. |
 
-Antes de cada calculo se limpian las variables CSS registradas y se remueven las clases de estado.
+Antes de cada cálculo se limpian las variables CSS registradas y se remueven las clases de estado.
 
 ```css
 [data-hequalizer].height-calculating {
@@ -348,20 +381,20 @@ Antes de cada calculo se limpian las variables CSS registradas y se remueven las
 
 ### `columns: "all"`
 
-Es el modo por defecto. Calcula la altura maxima entre todos los elementos del grupo y aplica el mismo valor a todos.
+Es el modo por defecto. Calcula la altura máxima entre todos los elementos del grupo y aplica el mismo valor a todos.
 
 ```javascript
 const instance = new Hequalizer('card-title', {
   columns: 'all'
 });
 
-// Si el elemento mas alto mide 140px:
+// Si el elemento más alto mide 140px:
 console.log(instance.values); // 140
 ```
 
 ### `columns: 2`, `3`, `4`, etc.
 
-Cuando `columns` es un numero mayor a `1`, Hequalizer divide los elementos en grupos consecutivos de ese tamano. Cada grupo recibe su propia altura maxima.
+Cuando `columns` es un número mayor a `1`, Hequalizer divide los elementos en grupos consecutivos de ese tamaño. Cada grupo recibe su propia altura máxima.
 
 ```javascript
 const instance = new Hequalizer('card-title', {
@@ -382,7 +415,7 @@ Elemento 5 + Elemento 6 = grupo 3
 
 ### `columns <= 1`
 
-Si `columns` es `1` o menor, Hequalizer limpia las variables/clases y no aplica ninguna altura. Esto es util para desactivar la igualacion en una vista de una sola columna:
+Si `columns` es `1` o menor, Hequalizer limpia las variables/clases y no aplica ninguna altura. Esto es útil para desactivar la igualación en una vista de una sola columna:
 
 ```javascript
 new Hequalizer('card-title', {
@@ -395,7 +428,33 @@ new Hequalizer('card-title', {
 });
 ```
 
-## Actualizacion automatica
+### Omisión de posiciones
+
+Con `columns` numérico puedes omitir posiciones de la grilla con `indexesToOmit`. Hequalizer recorre cada celda de la grilla y salta los índices indicados, de modo que los elementos del grupo se alinean con las celdas reales de tu layout.
+
+Es útil cuando algunas celdas de la grilla las ocupa otro contenido que no forma parte del grupo, por ejemplo un banner o una tarjeta destacada.
+
+```html
+<div class="grid">
+  <div class="featured">Contenido destacado</div>
+  <h3 class="card-title" data-hequalizer="card-title">Título 1</h3>
+  <h3 class="card-title" data-hequalizer="card-title">Título 2 más largo</h3>
+  <h3 class="card-title" data-hequalizer="card-title">Título 3</h3>
+</div>
+```
+
+```javascript
+new Hequalizer('card-title', {
+  columns: 3,
+  indexesToOmit: [0]
+});
+```
+
+Los índices son posiciones de la grilla, no posiciones dentro de los elementos del grupo. El conteo empieza en `0` y es global sobre toda la grilla. En el ejemplo, la celda `0` la ocupa el contenido destacado, por lo que los dos primeros elementos del grupo se igualan entre sí y el tercero queda en la siguiente fila.
+
+`indexesToOmit` solo aplica cuando `columns` es un número mayor a `1`. Como es parte de las opciones, también puedes cambiarlo por breakpoint dentro de `responsive`.
+
+## Actualización automática
 
 ### Carga inicial y fuentes
 
@@ -407,7 +466,7 @@ document.fonts.ready.then(() => {
 });
 ```
 
-Por esta razon, crea la instancia cuando los elementos ya existan en el DOM, por ejemplo despues de `DOMContentLoaded` o al final del `body`.
+Por esta razón, crea la instancia cuando los elementos ya existan en el DOM, por ejemplo después de `DOMContentLoaded` o al final del `body`.
 
 ### Resize
 
@@ -438,17 +497,17 @@ Cuando detecta cambios, espera `20ms`, recalcula y emite `hequalizer:{handle}:ch
 ```javascript
 const instance = new Hequalizer('card-description');
 
-// Si cambia texto o contenido interno, Hequalizer recalcula automaticamente.
+// Si cambia el texto o el contenido interno, Hequalizer recalcula automáticamente.
 ```
 
 ### Elementos agregados o eliminados
 
-El `MutationObserver` observa cambios dentro de los elementos actuales, pero no vuelve a buscar automaticamente nuevos elementos con el mismo `data-hequalizer`. Si agregas o eliminas elementos del grupo, llama `refreshElements()`.
+El `MutationObserver` observa cambios dentro de los elementos actuales, pero no vuelve a buscar automáticamente nuevos elementos con el mismo `data-hequalizer`. Si agregas o eliminas elementos del grupo, llama a `refreshElements()`.
 
 ```javascript
 const instance = new Hequalizer('card-title');
 
-// Despues de renderizar nuevas tarjetas:
+// Después de renderizar nuevas tarjetas:
 instance.refreshElements();
 ```
 
@@ -459,13 +518,13 @@ instance.refreshElements();
 ```html
 <div class="grid">
   <article class="card">
-    <h3 data-hequalizer="grid-title">Titulo 1</h3>
+    <h3 data-hequalizer="grid-title">Título 1</h3>
   </article>
   <article class="card">
-    <h3 data-hequalizer="grid-title">Titulo 2 mas largo</h3>
+    <h3 data-hequalizer="grid-title">Título 2 más largo</h3>
   </article>
   <article class="card">
-    <h3 data-hequalizer="grid-title">Titulo 3</h3>
+    <h3 data-hequalizer="grid-title">Título 3</h3>
   </article>
 </div>
 ```
@@ -486,19 +545,19 @@ new Hequalizer('grid-title', {
 }
 ```
 
-### Multiples grupos
+### Múltiples grupos
 
 Cada grupo necesita un `handle` distinto.
 
 ```html
 <article class="product-card">
   <h3 data-hequalizer="product-title">Nombre del producto</h3>
-  <p data-hequalizer="product-description">Descripcion del producto...</p>
+  <p data-hequalizer="product-description">Descripción del producto...</p>
 </article>
 
 <article class="product-card">
-  <h3 data-hequalizer="product-title">Nombre mas largo del producto</h3>
-  <p data-hequalizer="product-description">Descripcion mas larga del producto...</p>
+  <h3 data-hequalizer="product-title">Nombre más largo del producto</h3>
+  <p data-hequalizer="product-description">Descripción más larga del producto...</p>
 </article>
 ```
 
@@ -534,7 +593,7 @@ window.addEventListener('hequalizer:slide-title:init', (event) => {
   console.log('Slides igualados:', event.detail.instance.values);
 });
 
-// Despues de que el carousel agregue o quite slides dinamicamente:
+// Después de que el carousel agregue o quite slides dinámicamente:
 titleHequalizer.refreshElements();
 ```
 
@@ -553,29 +612,29 @@ new Hequalizer('card-title', {
 
 Con `columns: 1`, Hequalizer limpia la variable y no aplica altura, dejando que el layout mobile use la altura natural del contenido.
 
-## Buenas practicas
+## Buenas prácticas
 
 1. Usa handles descriptivos y en formato slug, por ejemplo `product-title`, `blog-card-description` o `feature-icon-label`.
 2. Inicializa Hequalizer cuando los elementos ya existan en el DOM.
 3. Usa una variable CSS distinta si tienes grupos con usos visuales diferentes.
-4. Usa `refreshElements()` despues de renderizar elementos nuevos o eliminar elementos existentes.
+4. Usa `refreshElements()` después de renderizar elementos nuevos o eliminar elementos existentes.
 5. Usa `destroy()` al desmontar vistas, componentes o sliders que ya no existan.
-6. En layouts de una columna, usa `columns: 1` para limpiar la igualacion.
-7. Si el resize dispara muchos recalculos, configura `debounce`.
+6. En layouts de una columna, usa `columns: 1` para limpiar la igualación.
+7. Si el resize dispara muchos recálculos, configura `debounce`.
 
-## Solucion de problemas
+## Solución de problemas
 
-| Problema | Causa probable | Solucion |
+| Problema | Causa probable | Solución |
 | --- | --- | --- |
 | No se igualan las alturas | El `handle` no coincide con `data-hequalizer`. | Verifica que `new Hequalizer('card-title')` coincida con `data-hequalizer="card-title"`. |
-| La variable CSS existe pero no se ve efecto | El CSS no usa la variable. | Aplica `height`, `min-height` u otra propiedad con `var(--height)` o tu variable personalizada. |
-| El constructor lanza error por handle invalido | El handle tiene mayusculas, espacios, guiones bajos o caracteres especiales. | Usa un slug con minusculas, numeros y guiones. |
-| El constructor dice que el handle ya esta en uso | Ya existe una instancia activa con ese handle. | Usa `Hequalizer.getInstance(handle)` o destruye esa instancia con `destroy()`. |
-| En mobile no aplica altura | El breakpoint activo tiene `columns: 1` o menor. | Cambia `columns` a un numero mayor que `1` si quieres mantener la igualacion. |
-| Los elementos nuevos no se incluyen | La instancia no ha vuelto a consultar el DOM. | Llama `instance.refreshElements()` despues de agregarlos. |
-| No recalcula en resize | `observeResize` esta en `false` en la configuracion activa. | Revisa `actualOptions` o elimina esa opcion del breakpoint. |
-| Recalcula demasiadas veces en resize | `debounce` esta en `0`. | Configura un valor como `100` o `150`. |
-| Las alturas son `0` | Los elementos estan ocultos o sin contenido al calcular. | Asegurate de que los elementos sean visibles antes de inicializar o llama `update()` cuando aparezcan. |
+| La variable CSS existe, pero no se ve el efecto | El CSS no usa la variable. | Aplica `height`, `min-height` u otra propiedad con `var(--height)` o tu variable personalizada. |
+| El constructor lanza error por handle inválido | El handle tiene mayúsculas, espacios, guiones bajos o caracteres especiales. | Usa un slug con minúsculas, números y guiones. |
+| El constructor dice que el handle ya está en uso | Ya existe una instancia activa con ese handle. | Usa `Hequalizer.getInstance(handle)` o destruye esa instancia con `destroy()`. |
+| En mobile no aplica altura | El breakpoint activo tiene `columns: 1` o menor. | Cambia `columns` a un número mayor que `1` si quieres mantener la igualación. |
+| Los elementos nuevos no se incluyen | La instancia no ha vuelto a consultar el DOM. | Llama a `instance.refreshElements()` después de agregarlos. |
+| No recalcula en resize | `observeResize` está en `false` en la configuración activa. | Revisa `actualOptions` o elimina esa opción del breakpoint. |
+| Recalcula demasiadas veces en resize | `debounce` está en `0`. | Configura un valor como `100` o `150`. |
+| Las alturas son `0` | Los elementos están ocultos o sin contenido al calcular. | Asegúrate de que los elementos sean visibles antes de inicializar o llama a `update()` cuando aparezcan. |
 
 ## Compatibilidad
 
@@ -585,7 +644,7 @@ Hequalizer requiere navegadores modernos con soporte para:
 - `MutationObserver`.
 - `CustomEvent`.
 - `document.fonts.ready`.
-- Clases JavaScript, propiedades estaticas y campos de clase.
+- Clases JavaScript, propiedades estáticas y campos de clase.
 
 Es framework agnostic y puede usarse con Vanilla JavaScript, React, Vue, Angular, Svelte o cualquier framework que renderice elementos en el DOM.
 
@@ -629,11 +688,11 @@ Las contribuciones son bienvenidas:
 3. Haz commit de tus cambios.
 4. Abre un Pull Request.
 
-Para reportar bugs, abre un issue en [GitHub Issues](https://github.com/soyleninjs/hequalizer/issues) e incluye pasos para reproducir el problema y navegador utilizado.
+Para reportar bugs, abre un issue en [GitHub Issues](https://github.com/soyleninjs/hequalizer/issues) e incluye pasos para reproducir el problema y el navegador utilizado.
 
 ## Licencia
 
-Este proyecto esta bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para mas detalles.
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ## Autor
 

@@ -1,57 +1,972 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hequalizer — Product Grid Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<div class="item" data-hequalizer="titles-name">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, eum numquam repudiandae expedita magni quidem iure nobis veniam ad magnam, molestiae dolorem, laborum dolor aperiam tempore? Soluta officiis assumenda culpa.</div>
-<div class="item skip-height">Este elemento se omite del cálculo</div>
-<div class="item" data-hequalizer="titles-name">Elemento normal</div>
-<div class="item skip-height">Este también se omite</div>
-<div class="item" data-hequalizer="titles-name"></div>
-<div class="item skip-height">Este también se omite</div>
-<div class="item skip-height">Este también se omite</div>
+    :root {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --surface-hover: #1e1e1e;
+      --border: #2a2a2a;
+      --text-primary: #f0f0f0;
+      --text-secondary: #888;
+      --text-muted: #555;
+      --accent: #c8f135;
+      --accent-dark: #a8cc20;
+      --radius: 12px;
+      --gap: 20px;
+    }
 
-<script src="./npm/hequalizer.min.js"></script>
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
 
-<script type="module">
-  window.addEventListener('DOMContentLoaded', () => {
-    new window.Hequalizer("titles-name", {
-      columns: 5,
-      responsive: {
-        600: {
-          cssVariable: '--600',
-          columns: 2
-        },
-        500: {
-          cssVariable: '--500',
-          columns: "all"
-        },
-        800: {
-          cssVariable: '--800',
-          observeResize: false,
-          columns: 2
+    /* ── Header ── */
+    header {
+      padding: 48px 40px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+    }
+
+    .brand {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .header-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ── Main ── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap);
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 28px 20px 20px; }
+      main { padding: 28px 20px 60px; }
+      .grid { grid-template-columns: repeat(2, 1fr); --gap: 12px; }
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      border-color: #3a3a3a;
+      transform: translateY(-3px);
+    }
+
+    .card:hover .card-image img {
+      transform: scale(1.04);
+    }
+
+    /* ── Image ── */
+    .card-image {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    /* ── Body ── */
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    /* Vendor */
+    .card-vendor {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .card-title,
+    .card-desc {
+      min-height: var(--height);
+    }
+
+    /* Título — Hequalizer lo iguala */
+    .card-title {
+      font-size: clamp(13px, 1.4vw, 15px);
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    /* Descripción — Hequalizer la iguala */
+    .card-desc {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    /* Reviews */
+    .card-reviews {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .star {
+      width: 11px;
+      height: 11px;
+      fill: var(--accent);
+    }
+
+    .star.half { fill: url(#half-fill); }
+    .star.empty { fill: var(--border); }
+
+    .reviews-count {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Precio */
+    .card-pricing {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .price-current {
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .price-original {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .price-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Info adicional */
+    .card-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .info-tag {
+      font-size: 10px;
+      color: var(--text-secondary);
+      background: #1f1f1f;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 8px;
+      letter-spacing: 0.02em;
+    }
+
+    /* CTA */
+    .card-footer {
+      padding: 0 16px 16px;
+      margin-top: auto;
+    }
+
+    .btn-add {
+      width: 100%;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-add:hover { background: var(--accent-dark); }
+
+    /* SVG gradient para estrellas medias — oculto */
+    .svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+  </style>
+</head>
+<body>
+
+  <!-- Definición del gradiente para media estrella -->
+  <svg class="svg-defs" aria-hidden="true">
+    <defs>
+      <linearGradient id="half-fill" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="50%" stop-color="#c8f135"/>
+        <stop offset="50%" stop-color="#2a2a2a"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">He<span>qualizer</span></div>
+      <span class="header-meta">Product grid demo — 20 items</span>
+    </div>
+  </header>
+
+  <main>
+    <p class="section-label">Featured products</p>
+
+    <div class="grid" id="product-grid">
+
+      <!-- Card 1 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=1" alt="Producto 1" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Artisan Co.</span>
+          <h2 class="card-title custom-card-title">Silla ergonómica de nogal y cuero</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Diseñada para largas jornadas, combina madera maciza con relleno de memoria viscoelástica y tapizado en cuero genuino italiano. Diseñada para largas jornadas, combina madera maciza con relleno de memoria viscoelástica y tapizado en cuero genuino italiano. Diseñada para largas jornadas, combina madera maciza con relleno de memoria viscoelástica y tapizado en cuero genuino italiano. Diseñada para largas jornadas, combina madera maciza con relleno de memoria viscoelástica y tapizado en cuero genuino italiano.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4.5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star half" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(142)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Envío gratis</span>
+            <span class="info-tag">Stock: 8</span>
+            <span class="info-tag">Nogal</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$1,249</span>
+            <span class="price-original">$1,490</span>
+            <span class="price-badge">−16%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=2" alt="Producto 2" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Lumina Studio</span>
+          <h2 class="card-title custom-card-title">Lámpara de piso minimalista Lámpara de piso minimalista Lámpara de piso minimalista Lámpara de piso minimalista Lámpara de piso minimalista</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Arco de aluminio mate con base de mármol blanco. Iluminación LED regulable de 2700K a 5000K con control táctil integrado en el cable.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(89)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">LED regulable</span>
+            <span class="info-tag">Stock: 14</span>
+            <span class="info-tag">Mármol + Al.</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$389</span>
+            <span class="price-original">$450</span>
+            <span class="price-badge">−14%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=3" alt="Producto 3" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Boreal</span>
+          <h2 class="card-title" data-hequalizer="card-title">Chaqueta técnica impermeable de montaña</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Shell de 3 capas con membrana Gore-Tex® y tratamiento DWR. Costuras termoselladas, capucha ajustable y bolsillos internos sellados.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star empty" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(211)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Gore-Tex®</span>
+            <span class="info-tag">Unisex</span>
+            <span class="info-tag">XS–XXL</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$799</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=4" alt="Producto 4" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Kinto Japan</span>
+          <h2 class="card-title" data-hequalizer="card-title">Dripper y servidor de 600 ml en vidrio borosilicato resistente al calor. Filtros de acero inoxidable reutilizables incluidos. Apto lavavajillas.</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Dripper y servidor de 600 ml en vidrio borosilicato resistente al calor. Filtros de acero inoxidable reutilizables incluidos. Apto lavavajillas.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4.5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star half" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(304)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Lavavajillas</span>
+            <span class="info-tag">Borosilicato</span>
+            <span class="info-tag">600 ml</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$128</span>
+            <span class="price-original">$160</span>
+            <span class="price-badge">−20%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=5" alt="Producto 5" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Keychron</span>
+          <h2 class="card-title" data-hequalizer="card-title">Teclado mecánico inalámbrico K3 Pro</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Formato 75% hot-swap con switches Gateron G Pro Red. Conectividad Bluetooth 5.1 y USB-C. Retroiluminación RGB por tecla y batería de 1500 mAh.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(521)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Hot-swap</span>
+            <span class="info-tag">BT 5.1</span>
+            <span class="info-tag">RGB</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$229</span>
+            <span class="price-original">$269</span>
+            <span class="price-badge">−15%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=6" alt="Producto 6" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Bose</span>
+          <h2 class="card-title" data-hequalizer="card-title">Audífonos QuietComfort 45 Wireless</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Cancelación activa de ruido de siguiente generación con modo Aware. Hasta 24 h de batería y carga rápida USB-C de 15 min para 2.5 h de uso.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4.5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star half" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(1,843)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">ANC</span>
+            <span class="info-tag">24 h batería</span>
+            <span class="info-tag">USB-C</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$329</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 7 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=7" alt="Producto 7" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Patagonia</span>
+          <h2 class="card-title" data-hequalizer="card-title">Mochila Black Hole® 25 L</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Construida con 100% tela reciclada y recubrimiento TPU. Resistente al agua, fondo reforzado y correas acolchadas con 8 bolsillos organizadores.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(678)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Reciclado</span>
+            <span class="info-tag">TPU</span>
+            <span class="info-tag">25 L</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$169</span>
+            <span class="price-original">$199</span>
+            <span class="price-badge">−15%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 8 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=8" alt="Producto 8" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Sonos</span>
+          <h2 class="card-title" data-hequalizer="card-title">Bocina Era 100 Wi-Fi + Bluetooth</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Dos tweeters y un woofer en configuración estéreo. Compatible con AirPlay 2, Spotify Connect y Amazon Alexa. Fabricada con plástico 45% reciclado.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star empty" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(432)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">AirPlay 2</span>
+            <span class="info-tag">Spotify</span>
+            <span class="info-tag">Reciclado</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$249</span>
+            <span class="price-original">$279</span>
+            <span class="price-badge">−11%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 9 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=9" alt="Producto 9" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Le Creuset</span>
+          <h2 class="card-title" data-hequalizer="card-title">Construida con 100% tela reciclada y recubrimiento TPU. Resistente al agua</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Hierro fundido esmaltado con tapa de acero inoxidable. Apta para todas las fuentes de calor incluyendo inducción. Garantía de por vida.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(2,210)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Inducción</span>
+            <span class="info-tag">Garantía vitalicia</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$499</span>
+            <span class="price-original">$579</span>
+            <span class="price-badge">−14%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 10 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=10" alt="Producto 10" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Peak Design</span>
+          <h2 class="card-title" data-hequalizer="card-title">Correa de cámara Slide Lite</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Nylon 100% reciclado con sistema de ajuste instantáneo Slider. Anclajes de aluminio mecanizado compatibles con cualquier cámara. Hecha en EE. UU.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4.5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star half" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(957)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Universal</span>
+            <span class="info-tag">Reciclado</span>
+            <span class="info-tag">Hecho en EE. UU.</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$79</span>
+            <span class="price-original">$89</span>
+            <span class="price-badge">−11%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 11 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=11" alt="Producto 11" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Aesop</span>
+          <h2 class="card-title" data-hequalizer="card-title">Aceite facial Fabulous Face Oil 25 ml</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Mezcla de aceites de rosa mosqueta, jojoba y semilla de granada. Hidrata y reafirma la piel. Fórmula vegana sin parabenos ni fragancias sintéticas.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(388)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Vegano</span>
+            <span class="info-tag">Sin parabenos</span>
+            <span class="info-tag">25 ml</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$149</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 12 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=12" alt="Producto 12" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Victorinox</span>
+          <h2 class="card-title" data-hequalizer="card-title">Cuchillo de chef Fibrox Pro 20 cm</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Hoja de acero inoxidable alemán 1.4116 con filo láser. Mango Fibrox ergonómico antideslizante. Recomendado por escuelas culinarias internacionales.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4.5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star half" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(4,102)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Acero 1.4116</span>
+            <span class="info-tag">20 cm</span>
+            <span class="info-tag">Pro</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$89</span>
+            <span class="price-original">$110</span>
+            <span class="price-badge">−19%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 13 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=13" alt="Producto 13" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Moleskine</span>
+          <h2 class="card-title" data-hequalizer="card-title">Cuaderno Classic Hardcover A5</h2>
+          <p class="card-desc" data-hequalizer="card-desc">240 páginas de papel marfil 70 g/m² con cuadriculado. Encuadernación cosida, bolsillo interior expandible y banda elástica de cierre. Papel certificado FSC.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star empty" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(1,560)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">FSC</span>
+            <span class="info-tag">240 pág.</span>
+            <span class="info-tag">Cuadriculado</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$28</span>
+            <span class="price-original">$34</span>
+            <span class="price-badge">−18%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 14 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=14" alt="Producto 14" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Fellow</span>
+          <h2 class="card-title" data-hequalizer="card-title">Hervidor eléctrico Stagg EKG Pro</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Control de temperatura preciso de 40°C a 100°C con pantalla LED. Pico de cisne para control de flujo. Acero inoxidable 304 y mango de madera de nogal.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(742)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">±0.5°C</span>
+            <span class="info-tag">Pico cisne</span>
+            <span class="info-tag">Acero 304</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$219</span>
+            <span class="price-original">$259</span>
+            <span class="price-badge">−15%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 15 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=15" alt="Producto 15" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Dyson</span>
+          <h2 class="card-title" data-hequalizer="card-title">Secadora de cabello Supersonic HD15</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Motor digital V9 con sensor de calor inteligente que mide temperatura 40 veces por segundo. 4 ajustes de calor, 3 velocidades y función Cold Shot.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4.5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star half" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(3,287)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Motor V9</span>
+            <span class="info-tag">Cold Shot</span>
+            <span class="info-tag">4 calores</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$429</span>
+            <span class="price-original">$499</span>
+            <span class="price-badge">−14%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 16 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=16" alt="Producto 16" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Thule</span>
+          <h2 class="card-title" data-hequalizer="card-title">Portabicicletas Thule T2 Pro XT 2</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Portabicicletas de plataforma para enganche de 2 pulgadas. Soporta 2 bicicletas de hasta 27 kg c/u. Inclinación sin herramientas y luces integradas.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star empty" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(193)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">2 bicis</span>
+            <span class="info-tag">Max 27 kg</span>
+            <span class="info-tag">Enganche 2"</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$699</span>
+            <span class="price-original">$799</span>
+            <span class="price-badge">−13%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 17 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=17" alt="Producto 17" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Fjällräven</span>
+          <h2 class="card-title" data-hequalizer="card-title">Mochila Kånken Classic 16 L</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Tela Vinylon F de alta resistencia al desgaste y repelente al agua. Diseño sueco clásico desde 1978 con compartimento acolchado para laptop de 13".</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(5,041)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">16 L</span>
+            <span class="info-tag">Laptop 13"</span>
+            <span class="info-tag">Vinylon F</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$119</span>
+            <span class="price-original">$140</span>
+            <span class="price-badge">−15%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 18 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=18" alt="Producto 18" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Nespresso</span>
+          <h2 class="card-title" data-hequalizer="card-title">Cafetera Vertuo Pop+ con aeroccino</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Sistema Centrifusion™ con lectura de código de barras para extracción perfecta. Prepara espresso, double espresso, gran lungo, mug y alto. Incluye espumador de leche.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4.5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star half" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(6,822)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Centrifusion™</span>
+            <span class="info-tag">5 tamaños</span>
+            <span class="info-tag">+ Aeroccino</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$179</span>
+            <span class="price-original">$219</span>
+            <span class="price-badge">−18%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 19 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=19" alt="Producto 19" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Bellroy</span>
+          <h2 class="card-title" data-hequalizer="card-title">Cartera slim Note Sleeve RFID</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Cuero ecológico certificado LWG de primera calidad con bloqueo RFID integrado. Capacidad para 12 tarjetas y billetes doblados. Grosor de 8 mm vacía.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4.5 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star half" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(2,119)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">RFID</span>
+            <span class="info-tag">LWG cert.</span>
+            <span class="info-tag">8 mm</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$99</span>
+            <span class="price-original">$119</span>
+            <span class="price-badge">−17%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+      <!-- Card 20 -->
+      <article class="card">
+        <div class="card-image">
+          <img src="https://ph.soylenin.com/image?w=600&h=600&seed=20" alt="Producto 20" width="600" height="600" loading="lazy" />
+        </div>
+        <div class="card-body">
+          <span class="card-vendor">Lamy</span>
+          <h2 class="card-title" data-hequalizer="card-title">Pluma estilográfica Safari edición especial Savannah Green</h2>
+          <p class="card-desc" data-hequalizer="card-desc">Cuerpo ABS con clip de acero y plumín de acero inoxidable en punta F. Sistema de carga por cartucho o convertidor. Edición especial 2024 en verde savannah.</p>
+          <div class="card-reviews">
+            <span class="stars" aria-label="4 de 5 estrellas">
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg class="star empty" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </span>
+            <span class="reviews-count">(874)</span>
+          </div>
+          <div class="card-info">
+            <span class="info-tag">Ed. Especial</span>
+            <span class="info-tag">Punta F</span>
+            <span class="info-tag">Cartucho/Conv.</span>
+          </div>
+          <div class="card-pricing">
+            <span class="price-current">$44</span>
+            <span class="price-original">$55</span>
+            <span class="price-badge">-20%</span>
+          </div>
+        </div>
+        <div class="card-footer"><button class="btn-add">Agregar al carrito</button></div>
+      </article>
+
+    </div><!-- /grid -->
+  </main>
+
+  <script src="./js/hequalizer.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const options = {
+        columns: 3,
+        debounce: 100,
+        // customSelector: '.custom-card-title',
+        indexesToOmit: [0, 1],
+        responsive: {
+          768: { columns: 2 }
         }
       }
-    });
 
-    window.addEventListener('hequalizer:titles-name:resize', () => {
-      console.log("hequalizer:titles-name:resize", event.detail.instance)
-    });
+      new window.Hequalizer("card-title", options);
+      new window.Hequalizer("card-desc", options);
 
-    window.addEventListener('hequalizer:titles-name:init', () => {
-      console.log("hequalizer:titles-name:init", event.detail.instance)
-    });
+      window.addEventListener('hequalizer:card-title:init', (event) => {
+        console.log('card-title init', event.detail.instance.values);
+      });
 
-    window.addEventListener('hequalizer:titles-name:change', () => {
-      console.log("hequalizer:titles-name:change", event.detail.instance)
+      window.addEventListener('hequalizer:card-title:resize', (event) => {
+        console.log('card-title resized', event.detail.instance.values);
+      });
     });
-    
-    window.addEventListener('hequalizer:titles-name:refresh', () => {
-      console.log("hequalizer:titles-name:refresh", event.detail.instance)
-    });
+  </script>
 
-    window.addEventListener('hequalizer:titles-name:update', () => {
-      console.log("hequalizer:titles-name:update", event.detail.instance)
-    });
-
-    window.addEventListener('hequalizer:titles-name:destroy', () => {
-      console.log("hequalizer:titles-name:destroy", event.detail.instance)
-    });
-  });
-</script>
+</body>
+</html>
